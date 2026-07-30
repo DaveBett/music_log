@@ -1,0 +1,37 @@
+{
+  "packageManager": "npm@11.2.0",
+  "name": "app",
+  "private": true,
+  "version": "0.1.0",
+  "browserslist": [
+    "defaults"
+  ],
+  "dependencies": {
+    "@rspack/core": "2.1.5",
+    "compression-webpack-plugin": "^12.0.0",
+    "css-loader": "7.1.4",
+    "css-minimizer-webpack-plugin": "8.0.0",
+    "mini-css-extract-plugin": "2.10.2",
+    "prop-types": "15.8.1",
+    "react": "19.2.8",
+    "react-dom": "19.2.8",
+    "react-on-rails": "17.0.0",
+    "rspack-manifest-plugin": "5.2.2",
+    "sass": "^1.101.6",
+    "sass-loader": "^16.0.8",
+    "shakapacker": "10.3.0",
+    "style-loader": "4.0.0"
+  },
+  "devDependencies": {
+    "@rspack/cli": "2.1.5",
+    "@rspack/dev-server": "2.1.0",
+    "@rspack/plugin-react-refresh": "2.0.2",
+    "@swc/core": "1.15.46",
+    "react-refresh": "0.18.0",
+    "swc-loader": "0.2.7"
+  },
+  "scripts": {
+    "build": "RAILS_ENV=production NODE_ENV=production bin/shakapacker-precompile-hook && SHAKAPACKER_SKIP_PRECOMPILE_HOOK=true RAILS_ENV=production NODE_ENV=production bin/shakapacker",
+    "build:test": "RAILS_ENV=test NODE_ENV=test bin/shakapacker-precompile-hook && SHAKAPACKER_SKIP_PRECOMPILE_HOOK=true RAILS_ENV=test NODE_ENV=test bin/shakapacker"
+  }
+}
