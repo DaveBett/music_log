@@ -2,6 +2,7 @@ import './App.css';
 import EntryList from "./components/EntryList";
 import AddEntry from './components/AddEntry';
 import TopButton from './components/TopButton';
+import Footer from "./components/Footer"
 import { useState, useEffect } from 'react';
 import { get_entries, create_entry, delete_entry, update_entry } from "./api/endpoints";
 
@@ -72,6 +73,7 @@ function App() {
           newEntryId={newEntryId}
         />
        <TopButton />
+        <Footer />
       </div>
     </div>
   );
