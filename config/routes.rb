@@ -1,7 +1,46 @@
 Rails.application.routes.draw do
-  get "entries", to: "entries#index"
+  devise_for :users
+
   namespace :api do
-    resources :entries
+    get    "musicbrainz/search"
+    post   "register", to: "users#register"
+    post   "login",    to: "users#login"
+    delete "logout",   to: "users#logout"
+
+    get    "me",              to: "users#me"
+    patch  "me",              to: "users#update"
+    patch  "me/password",     to: "users#update_password"
+    delete "me",              to: "users#delete"
+
+    patch "settings/password", to: "settings#password"
+    delete "settings",         to: "settings#destroy"
+
+    get "users/:username",         to: "users#show"
+    get "users/:username/reviews", to: "reviews#user_reviews"
+    get "profile",                 to: "users#profile"
+
+    get "feed", to: "feed#index"
+    get "search", to: "search#index"
+    get "musicbrainz/search", to: "music_brainz#search"
+
+    post "/entries/:entry_id/review", to: "reviews#create"
+
+    resources :entries do
+      resource :review, only: %i[show create]
+    end
+
+    resources :reviews, only: %i[index show update destroy]
+
+    resources :reviews do
+      resources :comments, only: [ :index, :create, :destroy ]
+    end
+
+    resources :users, only: :index do
+      resource :follow, only: [ :create, :destroy ]
+      get :followers, on: :member
+      get :following, on: :member
+    end
+
+    resource :settings, only: [ :show, :update ]
   end
-  root "api/entries#index"
 end

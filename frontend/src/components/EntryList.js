@@ -1,25 +1,28 @@
-import Entry from "./Entry" 
+import Entry from "./Entry";
 
 const EntryList = ({
-  entries, 
-  deleteEntry, 
-  editingEntry, 
-  onEdit, 
-  confirmDeleteId, 
+  entries,
+  onEdit,
+  deleteEntry,
+  editingEntry,
+  confirmDeleteId,
   setConfirmDeleteId,
-  newEntryId
 }) => {
 
   function getFormattedDate(date) {
-    if (date === undefined) {
-      return
-    }
-    const mm = date.slice(5, 7);
-    const dd = date.slice(8, 10);
-    
-    return (`${dd}/${mm}`);
+    if (!date) return "";
+    return `${date.slice(8, 10)}/${date.slice(5, 7)}`;
   }
-  var index = -1;
+
+  if (entries.length === 0) {
+    return (
+      <div className="empty-entries">
+        <p>
+          This music collection is empty.
+        </p>
+      </div>
+    );
+  }
 
   return (
     <div className="entry-list">
@@ -29,34 +32,37 @@ const EntryList = ({
         <h3 className="big">Artist</h3>
         <h3 className="big">Album</h3>
         <h3 className="medium">Year</h3>
-        <div className="small"/>
-        <div className="small"/>
+        <div className="medium"></div>
       </div>
-      {
-        entries.map((entry) => {
-          index += 1;
-          return (
-            <Entry 
-              key={entry.id}
-              id={entry.id}
-              index={entries.length - index} 
-              added={getFormattedDate(entry.created_at)} 
-              artist={entry.artist} 
-              title={entry.title} 
-              year={entry.year}
-              entry={entry}
-              onEdit={onEdit}
-              editing={editingEntry?.id === entry.id}
-              deleteEntry={deleteEntry}       
-              confirmDelete={confirmDeleteId === entry.id}
-              setConfirmDeleteId={setConfirmDeleteId}
-              isNew={newEntryId === entry.id}
-            />
-          )
-        })
-      }
-    </div>
-  )
-}
 
-export default EntryList
+      {entries.map((entry, index) => (
+        <Entry
+          key={entry.id}
+          id={entry.id}
+          index={entries.length - index}
+          added={getFormattedDate(entry.created_at)}
+          artist={entry.artist}
+          title={entry.title}
+          year={entry.year}
+          entry={entry}
+          onEdit={onEdit}
+          deleteEntry={deleteEntry}
+          editing={
+            editingEntry?.id === entry.id
+          }
+          confirmDelete={
+            confirmDeleteId === entry.id
+          }
+          setConfirmDeleteId={
+            setConfirmDeleteId
+          }
+          isNew={false}
+          editable={true}
+        />
+      ))}
+
+    </div>
+  );
+};
+
+export default EntryList;

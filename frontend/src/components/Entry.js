@@ -1,4 +1,6 @@
 import { MdOutlineDeleteForever, MdOutlineModeEdit } from "react-icons/md";
+import { Link } from "react-router-dom";
+
 
 const Entry = ({ 
   id, 
@@ -13,7 +15,8 @@ const Entry = ({
   editing,
   confirmDelete,
   setConfirmDeleteId,
-  isNew
+  isNew,
+  editable,
 }) => {
 
   const classes = [
@@ -68,10 +71,18 @@ const Entry = ({
         <h3 className="small">{index}</h3>
         <h3 className="medium">{added}</h3>
         <h3 className="big">{artist}</h3>
-        <h3 className="big">{title}</h3>
+        <h3 className="big">
+          <Link to={`/reviews/new/${id}`}>
+            {title}
+          </Link>
+        </h3>
         <h3 className="medium">({year})</h3>
-        <MdOutlineModeEdit className="small" size="25px" onClick={handleEdit}/>
-        <MdOutlineDeleteForever className="small" size="25px" onClick={() => setConfirmDeleteId(id)}/>
+        {editable && (
+          <div className="entry-actions medium">
+            <MdOutlineModeEdit  size="25px" onClick={handleEdit}/>
+            <MdOutlineDeleteForever size="25px" onClick={() => setConfirmDeleteId(id)}/>
+          </div>
+        )}
       </div>
     </div>
   )

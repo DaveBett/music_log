@@ -1,12 +1,10 @@
 class Api::EntriesController < ApplicationController
-  skip_forgery_protection
   before_action :set_entry, only: %i[ show edit update destroy ]
+  before_action :authenticate_user!
 
   # GET /entries or /entries.json
   def index
-    @entries = Entry.order(created_at: :desc)
-
-    render json: @entries
+    render json: current_user.entries.order(created_at: :desc)
   end
 
   # GET /entries/1 or /entries/1.json
@@ -25,21 +23,27 @@ class Api::EntriesController < ApplicationController
 
   # POST /entries or /entries.json
   def create
-    @entry = Entry.new(entry_params)
+    entry = current_user.entries.build(entry_params)
 
-    if @entry.save
-      render json: @entry, status: :created
+    if entry.save
+      render json: entry, status: :created
     else
-      render json: @entry.errors, status: :unprocessable_content
+      render json: {
+        errors: entry.errors.full_messages
+      }, status: :unprocessable_entity
     end
   end
 
   # PATCH/PUT /entries/1 or /entries/1.json
   def update
-    if @entry.update(entry_params)
-      render json: @entry, status: :ok
+    entry = current_user.entries.find(params[:id])
+
+    if entry.update(entry_params)
+      render json: entry
     else
-      render json: @entry.errors, status: :unprocessable_content
+      render json: {
+        errors: entry.errors.full_messages
+      }, status: :unprocessable_entity
     end
   end
 
@@ -51,11 +55,19 @@ class Api::EntriesController < ApplicationController
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_entry
-      @entry = Entry.find(params.expect(:id))
+      @entry = current_user.entries.find(params[:id])
     end
 
     # Only allow a list of trusted parameters through.
     def entry_params
-      params.expect(entry: [ :artist, :title, :year ])
+      params.expect(
+        entry: [
+          :artist,
+          :title,
+          :year,
+          :musicbrainz_id,
+          :musicbrainz_url
+        ]
+      )
     end
 end

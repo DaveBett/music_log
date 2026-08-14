@@ -1,82 +1,101 @@
+import React from 'react';
+import { Route, Routes } from 'react-router-dom';
+
+import Navbar from './components/navbar/Navbar';
+import LoginPage from './pages/LoginPage';
+import RegisterPage from "./pages/RegisterPage"
+import HomePage from './pages/HomePage';
+import ProfilePage from "./pages/ProfilePage";
+import PublicProfilePage from "./pages/PublicProfilePage"
+import SettingsPage from "./pages/SettingsPage";
+import ReviewsPage from "./pages/ReviewPage";
+import Footer from './components/Footer';
+import NewReviewPage from "./pages/NewReviewPage"
+import EditReviewPage from "./pages/EditReviewPage"
+
+import ProtectedRoute from "./components/ProtectedRoute";
+import AppLayout from "./components/AppLayout";
 import './App.css';
-import EntryList from "./components/EntryList";
-import AddEntry from './components/AddEntry';
-import TopButton from './components/TopButton';
-import Footer from "./components/Footer"
-import { useState, useEffect } from 'react';
-import { get_entries, create_entry, delete_entry, update_entry } from "./api/endpoints";
 
-function App() {
+const App = () => {
+    return (
+      <Routes>
+        <Route path="/login" element={<LoginPage />} />
+        <Route path="/register" element={<RegisterPage />} />
 
-  const [entries, setEntries] = useState([]);
-  const [editingEntry, setEditingEntry] = useState(null);
-  const [confirmDeleteId, setConfirmDeleteId] = useState(null);
-  const [newEntryId, setNewEntryId] = useState(null);
-
-  useEffect(() => {
-    const fetchEntries = async () => {
-      const entries = await get_entries();
-      setEntries(entries);
-    }
-    fetchEntries();
-  }, [])
-
-  const addEntry = async (artist, title, year) => {
-    const entry = await create_entry(artist, title, year);
-    setEntries(prev => [entry, ...prev])
-
-    setNewEntryId(entry.id);
-  }
-
-  const deleteEntry = async (id) => {
-    await delete_entry(id);
-    setEntries(entries.filter((entry) => entry.id !== id))
-  }
-
-  const updateEntry = async (id, artist, title, year) => {
-    const updated = await update_entry(id, artist, title, year);
-
-    setEntries(entries =>
-      entries.map(entry =>
-        entry.id === id ? updated : entry
-      )
+        <Route path="/" element={
+            <ProtectedRoute>
+              <Navbar />
+              <HomePage />
+              <Footer />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/profile"
+          element={
+            <ProtectedRoute>
+              <AppLayout>
+                <ProfilePage />
+              </AppLayout>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/settings"
+          element={
+            <ProtectedRoute>
+              <AppLayout>
+                <SettingsPage />
+              </AppLayout>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/user/:username"
+          element={
+          <ProtectedRoute>
+            <AppLayout>
+              <PublicProfilePage />
+            </AppLayout>
+          </ProtectedRoute>
+          }
+        />
+        
+        <Route
+          path="/reviews/new/:entryId"
+          element={
+            <ProtectedRoute>
+              <AppLayout>
+                <NewReviewPage />
+              </AppLayout>
+            </ProtectedRoute>
+          }
+        />
+              
+        <Route
+          path="/reviews/:reviewId/edit"
+          element={
+            <ProtectedRoute>
+              <AppLayout>
+                <EditReviewPage />
+              </AppLayout>
+            </ProtectedRoute>
+          }
+        />
+              
+        <Route
+          path="/reviews/:reviewId"
+          element={
+            <ProtectedRoute>
+              <AppLayout>
+                <ReviewsPage />
+              </AppLayout>
+            </ProtectedRoute>
+          }
+        />
+      </Routes>
     );
-    setEditingEntry(null);
-  }
-
-  const handleEdit = (entry) => {
-    setEditingEntry(entry);
-  
-    window.scrollTo({
-      top: 0,
-      behavior: "smooth"
-    });
-  };
-
-  return (
-    <div className="App">
-      <div className='app-container'>
-        <h1 className='title'>Music Log</h1>
-        <AddEntry 
-          addEntry={addEntry} 
-          updateEntry={updateEntry} 
-          editingEntry={editingEntry} 
-          setEditingEntry={setEditingEntry}
-        />
-        <EntryList 
-          entries={entries} 
-          editingEntry={editingEntry} 
-          deleteEntry={deleteEntry}
-          onEdit={handleEdit}
-          confirmDeleteId={confirmDeleteId}
-          setConfirmDeleteId={setConfirmDeleteId}
-          newEntryId={newEntryId}
-        />
-       <TopButton />
-        <Footer />
-      </div>
-    </div>
-  );
-}
+};
 
 export default App;

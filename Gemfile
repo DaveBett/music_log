@@ -1,5 +1,7 @@
 source "https://rubygems.org"
 
+gem "devise-jwt"
+gem "jwt"
 gem "rack-cors"
 # Bundle edge Rails instead: gem "rails", github: "rails/rails", branch: "main"
 gem "rails", "~> 8.1.3"
@@ -66,6 +68,4 @@ group :test do
   gem "selenium-webdriver"
 end
 
-gem "react_on_rails", "= 17.0"
-
-gem "shakapacker", "= 10.3"
+gem "devise", "~> 5.0"
