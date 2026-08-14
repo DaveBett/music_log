@@ -12,6 +12,7 @@ import ReviewsPage from "./pages/ReviewPage";
 import Footer from './components/Footer';
 import NewReviewPage from "./pages/NewReviewPage"
 import EditReviewPage from "./pages/EditReviewPage"
+import ErrorPage from './pages/ErrorPage';
 
 import ProtectedRoute from "./components/ProtectedRoute";
 import AppLayout from "./components/AppLayout";
@@ -94,6 +95,8 @@ const App = () => {
             </ProtectedRoute>
           }
         />
+
+        <Route path="*" element={<ErrorPage statusCode={404} />} />
       </Routes>
     );
 };

@@ -1,0 +1,33 @@
+.error-page {
+  min-height: 70vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 40px 20px;
+}
+
+.error-page-content {
+  max-width: 600px;
+  text-align: center;
+}
+
+.error-code {
+  display: block;
+  font-size: 96px;
+  font-weight: 700;
+  line-height: 1;
+  margin-bottom: 20px;
+}
+
+.error-page-content h1 {
+  margin-bottom: 15px;
+}
+
+.error-page-content p {
+  margin-bottom: 30px;
+}
+
+.error-path {
+  font-family: monospace;
+  opacity: 0.7;
+}
