@@ -3,6 +3,8 @@ class Entry < ApplicationRecord
 
   has_one :activity, as: :trackable, dependent: :destroy
   has_one :review, dependent: :destroy
+  has_many :entry_genres, dependent: :destroy
+  has_many :genres, through: :entry_genres
 
   after_create :create_activity
 

@@ -17,7 +17,6 @@ class MusicBrainzService
 
     return [] if query.blank?
 
-    # First, determine whether the query matches an artist.
     artists = search_artists(query)
 
     primary_artist =
@@ -26,11 +25,6 @@ class MusicBrainzService
         query
       )
 
-    # If an artist was found, ONLY search that artist's
-    # release groups.
-    #
-    # We deliberately do not perform a general album
-    # search here.
     if primary_artist
       Rails.logger.info(
         "MusicBrainz matched artist: " \
@@ -43,16 +37,37 @@ class MusicBrainzService
       )
     end
 
-    # No artist matched, so this is treated as an
-    # album search.
     search_general_albums(query)
   end
 
-  private
+  def self.get_release_group(release_group_id)
+    return nil if release_group_id.blank?
 
-  # --------------------------------------------------
-  # Artist search
-  # --------------------------------------------------
+    uri = URI(
+      "#{RELEASE_GROUP_URL}/#{release_group_id}"
+    )
+
+    uri.query = URI.encode_www_form(
+      inc: "genres",
+      fmt: "json"
+    )
+
+    Rails.logger.info(
+      "MusicBrainz release-group lookup: #{uri}"
+    )
+
+    data = make_request(uri)
+
+    {
+      id: data["id"],
+      title: data["title"],
+      genres: data.fetch("genres", []).filter_map do |genre|
+        genre["name"].presence
+      end
+    }
+  end
+
+  private
 
   def self.search_artists(query)
     uri = URI(ARTIST_URL)
@@ -72,15 +87,10 @@ class MusicBrainzService
     data.fetch("artists", [])
   end
 
-  # --------------------------------------------------
-  # Find the best matching artist
-  # --------------------------------------------------
-
   def self.find_primary_artist(artists, query)
     normalized_query =
       query.downcase.strip
 
-    # Exact match
     exact_match =
       artists.find do |artist|
         artist["name"]
@@ -92,7 +102,6 @@ class MusicBrainzService
 
     return exact_match if exact_match
 
-    # Starts with query
     starts_with_match =
       artists.find do |artist|
         artist["name"]
@@ -105,7 +114,6 @@ class MusicBrainzService
 
     return starts_with_match if starts_with_match
 
-    # Contains query
     contains_match =
       artists.find do |artist|
         artist["name"]
@@ -120,10 +128,6 @@ class MusicBrainzService
 
     nil
   end
-
-  # --------------------------------------------------
-  # Artist albums + EPs
-  # --------------------------------------------------
 
   def self.search_release_groups_for_artist(artist_id)
     uri = URI(RELEASE_GROUP_URL)
@@ -145,10 +149,6 @@ class MusicBrainzService
     parse_release_groups(data)
   end
 
-  # --------------------------------------------------
-  # General album search
-  # --------------------------------------------------
-
   def self.search_general_albums(query)
     uri = URI(RELEASE_GROUP_URL)
 
@@ -168,10 +168,6 @@ class MusicBrainzService
       [ "Album", "EP" ].include?(album[:type])
     end
   end
-
-  # --------------------------------------------------
-  # Parse release groups
-  # --------------------------------------------------
 
   def self.parse_release_groups(data)
     data.fetch("release-groups", []).filter_map do |release_group|
@@ -223,10 +219,6 @@ class MusicBrainzService
       }
     end
   end
-
-  # --------------------------------------------------
-  # HTTP request
-  # --------------------------------------------------
 
   def self.make_request(uri)
     request =

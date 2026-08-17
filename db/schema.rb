@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_08_14_154741) do
+ActiveRecord::Schema[8.1].define(version: 2026_08_17_083705) do
   create_table "activities", force: :cascade do |t|
     t.integer "activity_type", null: false
     t.datetime "created_at", null: false
@@ -48,6 +48,15 @@ ActiveRecord::Schema[8.1].define(version: 2026_08_14_154741) do
     t.index ["year"], name: "index_entries_on_year"
   end
 
+  create_table "entry_genres", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.integer "entry_id", null: false
+    t.integer "genre_id", null: false
+    t.datetime "updated_at", null: false
+    t.index ["entry_id"], name: "index_entry_genres_on_entry_id"
+    t.index ["genre_id"], name: "index_entry_genres_on_genre_id"
+  end
+
   create_table "follows", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.integer "followed_id", null: false
@@ -56,6 +65,12 @@ ActiveRecord::Schema[8.1].define(version: 2026_08_14_154741) do
     t.index ["followed_id"], name: "index_follows_on_followed_id"
     t.index ["follower_id", "followed_id"], name: "index_follows_on_follower_id_and_followed_id", unique: true
     t.index ["follower_id"], name: "index_follows_on_follower_id"
+  end
+
+  create_table "genres", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.string "name"
+    t.datetime "updated_at", null: false
   end
 
   create_table "jwt_denylists", force: :cascade do |t|
@@ -102,6 +117,8 @@ ActiveRecord::Schema[8.1].define(version: 2026_08_14_154741) do
   add_foreign_key "comments", "reviews"
   add_foreign_key "comments", "users"
   add_foreign_key "entries", "users"
+  add_foreign_key "entry_genres", "entries"
+  add_foreign_key "entry_genres", "genres"
   add_foreign_key "follows", "users", column: "followed_id"
   add_foreign_key "follows", "users", column: "follower_id"
   add_foreign_key "reviews", "entries"

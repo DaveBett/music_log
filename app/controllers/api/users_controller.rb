@@ -158,7 +158,16 @@ class Api::UsersController < ApplicationController
         logs: current_user.entries.count,
         reviews: current_user.reviews.count,
         followers: current_user.followers.count,
-        following: current_user.following.count
+        following: current_user.following.count,
+        favorite_genre: favorite_genre,
+        this_year_logs: current_user.entries
+          .where(
+            created_at: Time.current.beginning_of_year..Time.current.end_of_year
+          ).count,
+        average_rating: current_user.reviews
+        .where.not(rating: nil)
+        .average(:rating)
+        &.round(2)
       },
 
       entries: current_user.entries.order(created_at: :desc)
@@ -197,5 +206,18 @@ class Api::UsersController < ApplicationController
       :password,
       :password_confirmation
     )
+  end
+
+  def favorite_genre
+    Genre
+      .joins(entry_genres: :entry)
+      .where(entries: { user_id: current_user.id })
+      .group("genres.id", "genres.name")
+      .order(
+        Arel.sql("COUNT(entry_genres.id) DESC"),
+        "genres.name ASC"
+      )
+      .limit(1)
+      .pick(:name)
   end
 end

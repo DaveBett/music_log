@@ -1,7 +1,6 @@
-export default function UserStatsSection({stats}) {
+export default function UserStatSection({ stats }) {
   return (
     <div className="stats-grid">
-
       <div className="stat-card">
         <h3>Albums Logged</h3>
         <span>{stats?.logs ?? 0}</span>
@@ -14,22 +13,33 @@ export default function UserStatsSection({stats}) {
 
       <div className="stat-card">
         <h3>Average Rating</h3>
-        <span>—</span>
+        <span>
+          {stats?.average_rating != null
+            ? `${Number(stats.average_rating).toFixed(1)}`
+            : "-"}
+        </span>
+        {console.log(stats.average_rating)}
       </div>
 
       <div className="stat-card">
         <h3>Favorite Artist</h3>
-        <span>—</span>
+        <span>
+          {stats?.favorite_artist || "-"}
+        </span>
       </div>
 
       <div className="stat-card">
         <h3>Favorite Genre</h3>
-        <span>—</span>
+        <span>
+          {stats?.favorite_genre || "-"}
+        </span>
       </div>
 
       <div className="stat-card">
         <h3>This Year's Logs</h3>
-        <span>0</span>
+        <span>
+          {stats?.this_year_logs ?? 0}
+        </span>
       </div>
 
     </div>
