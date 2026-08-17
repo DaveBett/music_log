@@ -68,19 +68,20 @@ const Entry = ({
   return (
     <div className={classes}>
       <div className="entry-container">
-        <h3 className="small">{index}</h3>
-        <h3 className="medium">{added}</h3>
-        <h3 className="big">{artist}</h3>
-        <h3 className="big">
-          <Link to={`/reviews/new/${id}`}>
-            {title}
-          </Link>
+        <h3 className="entry-number">{index}</h3>
+        <h3 className="entry-date">{added}</h3>
+        <h3 className="entry-artist">{artist}</h3>
+
+        <h3 className="entry-album">
+          <Link to={`/reviews/new/${id}`}>{title}</Link>
         </h3>
-        <h3 className="medium">({year})</h3>
+
+        <h3 className="entry-year">({year})</h3>
+
         {editable && (
-          <div className="entry-actions medium">
-            <MdOutlineModeEdit  size="25px" onClick={handleEdit}/>
-            <MdOutlineDeleteForever size="25px" onClick={() => setConfirmDeleteId(id)}/>
+          <div className="entry-actions">
+            <MdOutlineModeEdit size="25px" onClick={handleEdit} /> 
+            <MdOutlineDeleteForever size="25px" onClick={() => setConfirmDeleteId(id)} />
           </div>
         )}
       </div>

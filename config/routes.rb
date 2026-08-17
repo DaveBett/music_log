@@ -19,11 +19,16 @@ Rails.application.routes.draw do
     get "users/:username/reviews", to: "reviews#user_reviews"
     get "profile",                 to: "users#profile"
 
-    get "feed", to: "feed#index"
+    get "feed",   to: "feed#index"
     get "search", to: "search#index"
+
     get "musicbrainz/search", to: "music_brainz#search"
 
     post "/entries/:entry_id/review", to: "reviews#create"
+
+    get "/verify-email",         to: "email_verifications#show"
+    post "/verify-email/resend", to: "email_verifications#resend"
+    post "/resend-confirmation", to: "users#resend_confirmation"
 
     resources :entries do
       resource :review, only: %i[show create]

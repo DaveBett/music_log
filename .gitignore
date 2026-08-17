@@ -45,3 +45,7 @@ yarn-debug.log*
 **/generated/**
 ssr-generated
 .env
+
+# Ignore key files for decrypting credentials and more.
+/config/credentials/*.key
+

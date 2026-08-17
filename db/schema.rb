@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_08_13_155642) do
+ActiveRecord::Schema[8.1].define(version: 2026_08_14_154741) do
   create_table "activities", force: :cascade do |t|
     t.integer "activity_type", null: false
     t.datetime "created_at", null: false
@@ -84,6 +84,9 @@ ActiveRecord::Schema[8.1].define(version: 2026_08_13_155642) do
   create_table "users", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.string "email", default: "", null: false
+    t.datetime "email_verification_sent_at"
+    t.string "email_verification_token_digest"
+    t.datetime "email_verified_at"
     t.string "encrypted_password", default: "", null: false
     t.datetime "remember_created_at"
     t.datetime "reset_password_sent_at"

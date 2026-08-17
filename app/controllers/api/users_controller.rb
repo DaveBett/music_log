@@ -1,6 +1,6 @@
 class Api::UsersController < ApplicationController
   before_action :authenticate_user!,
-  except: [ :login, :register ]
+    except: [ :login, :register, :verify_email, :resend_confirmation ]
 
   def me
     render json: {
@@ -14,13 +14,13 @@ class Api::UsersController < ApplicationController
     user = User.new(user_params)
 
     if user.save
-      token, _payload =
-        Warden::JWTAuth::UserEncoder.new.call(user, :user, nil)
+      token = user.generate_email_verification_token!
 
-        render json: {
-          user: user_json(user),
-          token: token
-        }
+      UserMailer.email_verification(user, token).deliver_later
+
+      render json: {
+        user: user_json(user)
+      }, status: :created
     else
       render json: {
         errors: user.errors.full_messages
@@ -34,7 +34,14 @@ class Api::UsersController < ApplicationController
     user = User.find_by(email: credentials[:email])
 
     if user&.valid_password?(credentials[:password])
-      token, _payload = Warden::JWTAuth::UserEncoder.new.call(user, :user, nil)
+      unless user.email_verified?
+        return render json: {
+          error: "Please confirm your email address before logging in."
+        }, status: :forbidden
+      end
+
+      token, _payload =
+        Warden::JWTAuth::UserEncoder.new.call(user, :user, nil)
 
       render json: {
         user: user_json(user),
@@ -46,6 +53,39 @@ class Api::UsersController < ApplicationController
       }, status: :unauthorized
     end
   end
+
+  def verify_email
+    token = params[:token]
+
+    user = User.find_by_email_verification_token(token)
+
+    unless user
+      return render json: {
+        error: "This verification link is invalid or has expired."
+      }, status: :unprocessable_entity
+    end
+
+    user.verify_email!
+
+    render json: {
+      message: "Your email has been verified successfully."
+    }
+  end
+
+  def resend_confirmation
+    user = User.find_by(email: params[:email])
+
+    if user && !user.email_verified?
+      token = user.generate_email_verification_token!
+
+      UserMailer.email_verification(user, token).deliver_later
+    end
+
+    render json: {
+      message: "If an unverified account exists for that email, a confirmation email has been sent."
+    }
+  end
+
   def logout
     head :no_content
   end
@@ -101,7 +141,6 @@ class Api::UsersController < ApplicationController
         following: user.following.count
       },
       entries: user.entries.order(created_at: :desc),
-
       following: current_user.following?(user)
     }
   end
@@ -158,15 +197,5 @@ class Api::UsersController < ApplicationController
       :password,
       :password_confirmation
     )
-  end
-
-  def render_current_user
-    render json: {
-      user: {
-        id: current_user.id,
-        username: current_user.username,
-        email: current_user.email
-      }
-    }
   end
 end

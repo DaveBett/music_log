@@ -1,6 +1,9 @@
 class User < ApplicationRecord
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
+  require "digest"
+  require "securerandom"
+
   devise :database_authenticatable,
   :registerable,
   :recoverable,
@@ -32,5 +35,29 @@ class User < ApplicationRecord
     active_follows.find_by(
       followed: user
     )&.destroy
+  end
+
+  def email_verified?
+    email_verified_at.present?
+  end
+
+  def generate_email_verification_token!
+    raw_token = SecureRandom.urlsafe_base64(32)
+
+    update!(
+      email_verification_token_digest:
+        Digest::SHA256.hexdigest(raw_token),
+      email_verification_sent_at: Time.current
+    )
+
+    raw_token
+  end
+
+  def verify_email!
+    update!(
+      email_verified_at: Time.current,
+      email_verification_token_digest: nil,
+      email_verification_sent_at: nil
+    )
   end
 end

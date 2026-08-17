@@ -33,13 +33,17 @@ export default function AuthForm({ mode }) {
         await signIn(email, password, rememberMe);
       }
 
-      navigate("/");
-    } catch (err) {
-      setError(err.message || "Something went wrong");
-    } finally {
-      setLoading(false);
-    }
-  };
+      if (isRegister) {
+        navigate("/check-email");
+      } else {
+        navigate("/");
+      }
+      } catch (err) {
+        setError(err.message || "Something went wrong");
+      } finally {
+        setLoading(false);
+      }
+    };
 
   return (
     <form className="auth-card" onSubmit={handleSubmit}>

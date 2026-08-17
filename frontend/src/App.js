@@ -13,6 +13,8 @@ import Footer from './components/Footer';
 import NewReviewPage from "./pages/NewReviewPage"
 import EditReviewPage from "./pages/EditReviewPage"
 import ErrorPage from './pages/ErrorPage';
+import VerifyEmailPage from './pages/VerifyEmailPage';
+import CheckEmailPage from './pages/CheckEmailPage';
 
 import ProtectedRoute from "./components/ProtectedRoute";
 import AppLayout from "./components/AppLayout";
@@ -95,7 +97,8 @@ const App = () => {
             </ProtectedRoute>
           }
         />
-
+        <Route path="/verify-email" element={<VerifyEmailPage />} />
+        <Route path="/check-email" element={<CheckEmailPage />} />
         <Route path="*" element={<ErrorPage statusCode={404} />} />
       </Routes>
     );

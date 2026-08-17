@@ -335,3 +335,25 @@ export const getAlbumCoverUrl = (musicbrainzId) => {
 
   return `https://coverartarchive.org/release-group/${musicbrainzId}/front-250`;
 };
+
+export const verifyEmail = async (token) => {
+  const response = await api.get(
+    "/verify-email",
+    {
+      params: { token }
+    }
+  );
+
+  return response.data;
+};
+
+export const resendVerificationEmail = async (email) => {
+  const response = await api.post(
+    "/resend-confirmation",
+    {
+      email
+    }
+  );
+
+  return response.data;
+};
