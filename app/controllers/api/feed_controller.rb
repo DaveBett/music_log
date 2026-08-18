@@ -1,5 +1,5 @@
 class Api::FeedController < ApplicationController
-  # before_action :authenticate_user!
+  before_action :authenticate_user!
 
   def index
     activities =
@@ -81,11 +81,18 @@ class Api::FeedController < ApplicationController
 
       user: {
         id: activity.user.id,
-        username: activity.user.username
+        username: activity.user.username,
+        avatar_url: avatar_url(activity.user)
       },
 
       data: activity_data(activity)
     }
+  end
+
+  def avatar_url(user)
+    return nil unless user.avatar.attached?
+
+    url_for(user.avatar)
   end
 
   def activity_data(activity)

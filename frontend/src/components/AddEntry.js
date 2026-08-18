@@ -206,13 +206,9 @@ const AddEntry = ({
         )}
       </div>
 
-      {searching ? (
+      {searching && (
         <div className="musicbrainz-searching">
           Searching...
-        </div>
-      ) : (
-        <div className="musicbrainz-searching">
-          Click on any album name to leave a review.
         </div>
       )}
 

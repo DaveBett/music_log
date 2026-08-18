@@ -1,4 +1,4 @@
-import { FaUserCircle } from "react-icons/fa";
+import Avatar from "../Avatar";
 
 export default function ProfileHeader({
   user,
@@ -15,7 +15,7 @@ export default function ProfileHeader({
   return (
     <div className="profile-header">
       <div className="profile-avatar">
-        <FaUserCircle size={90} />
+      <Avatar src={user.avatar_url} username={user.username} size={120}/>
       </div>
 
       <div className="profile-info">

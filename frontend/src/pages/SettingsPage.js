@@ -2,15 +2,16 @@ import { useState } from "react";
 import { useAuth } from "../context/AuthContext";
 
 import AccountSettingsCard from "../components/settings/AccountSettingsCard";
+import AvatarSettingsCard from "../components/settings/AvatarSettingsCard";
 import SecuritySettingsCard from "../components/settings/SecuritySettingsCard";
 import DangerZoneCard from "../components/settings/DangerZoneCard";
 
-import { updatePassword } from "../api/endpoints";
+import { updatePassword, updateAvatar } from "../api/endpoints";
 
 import "./SettingsPage.css";
 
 export default function SettingsPage() {
-  const { user, updateProfile } = useAuth();
+  const { user, updateProfile, updateAvatar: updateUserAvatar } = useAuth();
 
   const [username, setUsername] = useState(user?.username || "");
   const [email, setEmail] = useState(user?.email || "");
@@ -27,6 +28,37 @@ export default function SettingsPage() {
 
   const [profileError, setProfileError] = useState("");
   const [passwordError, setPasswordError] = useState("");
+
+  const [savingAvatar, setSavingAvatar] = useState(false);
+  const [avatarSuccess, setAvatarSuccess] = useState(false);
+  const [avatarError, setAvatarError] = useState("");
+
+  const handleAvatarUpdate = async (file) => {
+    setSavingAvatar(true);
+    setAvatarError("");
+    setAvatarSuccess(false);
+  
+    try {
+      const data = await updateAvatar(file);
+  
+      updateUserAvatar(data.avatar_url);
+  
+      setAvatarSuccess(true);
+  
+      setTimeout(() => {
+        setAvatarSuccess(false);
+      }, 3000);
+  
+    } catch (err) {
+      setAvatarError(
+        err.response?.data?.errors?.join(", ") ||
+        err.response?.data?.error ||
+        "Unable to update profile picture."
+      );
+    } finally {
+      setSavingAvatar(false);
+    }
+  };
 
   const handleProfileUpdate = async () => {
     setSavingProfile(true);
@@ -98,6 +130,24 @@ export default function SettingsPage() {
     <div className="settings-page">
 
       <h1>Settings</h1>
+
+      <AvatarSettingsCard
+        user={user}
+        onSave={handleAvatarUpdate}
+        saving={savingAvatar}
+      />
+
+      {avatarSuccess && (
+        <div className="success-banner">
+          Profile picture updated successfully.
+        </div>
+      )}
+
+      {avatarError && (
+        <div className="error-banner">
+          {avatarError}
+        </div>
+      )}
 
       <AccountSettingsCard
         username={username}

@@ -327,8 +327,6 @@ form {
   white-space: nowrap;
 }
 
-/* MusicBrainz dropdown */
-
 .album-search-dropdown {
   position: absolute;
   top: calc(100% + 6px);
@@ -427,6 +425,30 @@ form {
 
 .search-status {
   margin-top: 6px;
+}
+
+.avatar {
+  border-radius: 50%;
+  overflow: hidden;
+  background: #3b3b3b;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+.avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.forgot-password {
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 @media (max-width: 700px) {

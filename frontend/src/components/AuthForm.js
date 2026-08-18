@@ -10,6 +10,7 @@ export default function AuthForm({ mode }) {
 
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
+  const [login, setLogin] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [rememberMe, setRememberMe] = useState(false);
@@ -27,10 +28,10 @@ export default function AuthForm({ mode }) {
         if (password !== confirmPassword) {
           throw new Error("Passwords don't match");
         }
-
+      
         await signUp(username, email, password);
       } else {
-        await signIn(email, password, rememberMe);
+        await signIn(login, password, rememberMe);
       }
 
       if (isRegister) {
@@ -39,7 +40,25 @@ export default function AuthForm({ mode }) {
         navigate("/");
       }
       } catch (err) {
-        setError(err.message || "Something went wrong");
+        if (err.response?.status === 401) {
+          setError(
+            "The email or password you entered is incorrect."
+          );
+        } else if (err.response?.status === 403) {
+          setError(
+            "Please confirm your email address before signing in."
+          );
+        } else if (
+          err.response?.data?.errors
+        ) {
+          setError(
+            err.response.data.errors.join(", ")
+          );
+        } else {
+          setError(
+            "Something went wrong. Please try again."
+          );
+        }
       } finally {
         setLoading(false);
       }
@@ -51,29 +70,29 @@ export default function AuthForm({ mode }) {
 
       {error && <div className="auth-error">{error}</div>}
 
-      {isRegister && (
+      {isRegister ? (
         <input
-          id="username"
+          id="email"
+          className="auth-input"
+          type="email"
+          placeholder="Email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          autoComplete="email"
+          required
+        />
+      ) : (
+        <input
+          id="login"
           className="auth-input"
           type="text"
-          placeholder="Username"
-          value={username}
-          onChange={(e) => setUsername(e.target.value)}
-          autoComplete="on"
+          placeholder="Username or email"
+          value={login}
+          onChange={(e) => setLogin(e.target.value)}
+          autoComplete="username"
           required
         />
       )}
-
-      <input
-        id="email"
-        className="auth-input"
-        type="email"
-        placeholder="Email"
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
-        autoComplete="on"
-        required
-      />
 
       <PasswordInput
         id="password"
@@ -86,31 +105,39 @@ export default function AuthForm({ mode }) {
 
       {isRegister && (
         <PasswordInput
-        id="password-confirm"
-        placeholder="Confirm password"
-        value={confirmPassword}
-        onChange={(e) => setConfirmPassword(e.target.value)}
-        autoComplete="new-password"
-        required>
-          <small>Must contain at least 8 characters.</small>
+          id="password-confirm"
+          placeholder="Confirm password"
+          value={confirmPassword}
+          onChange={(e) => setConfirmPassword(e.target.value)}
+          autoComplete="new-password"
+          required>
+           <small>Must contain at least 8 characters.</small>
         </PasswordInput>
       )}
 
       {!isRegister && (
-        <div className="remember-row">
-          <label className="switch">
-            <input
-              type="checkbox"
-              checked={rememberMe}
-              onChange={() => setRememberMe(!rememberMe)}
-            />
-            <span className="slider"></span>
-          </label>
+        <>
+          <div className="remember-row">
+            <label className="switch">
+              <input
+                type="checkbox"
+                checked={rememberMe}
+                onChange={() => setRememberMe(!rememberMe)}
+              />
+              <span className="slider"></span>
+            </label>
       
-          <span className="remember-label">
-            Remember me
-          </span>
-        </div>
+            <span className="remember-label">
+              Remember me
+            </span>
+          </div>
+      
+          <div className="forgot-password">
+            <Link to="/forgot-password">
+              Forgot your password?
+            </Link>
+          </div>
+        </>
       )}
 
       <button className="auth-button" disabled={loading}>

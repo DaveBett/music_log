@@ -1,7 +1,8 @@
 import { useEffect, useRef, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { FaUserCircle, FaChevronDown } from "react-icons/fa";
+import { FaChevronDown } from "react-icons/fa";
 import { useAuth } from "../../context/AuthContext";
+import Avatar from "../Avatar";
 import SearchBar from "./SearchBar";
 import "./Navbar.css";
 
@@ -47,7 +48,7 @@ export default function Navbar() {
           className="profile-button"
           onClick={() => setOpen(!open)}
         >
-          <FaUserCircle />
+          <Avatar src={user.avatar_url} username={user.username} size={34}/>
 
           <span>{user?.username}</span>
 

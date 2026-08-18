@@ -1,23 +1,20 @@
-export default function Sidebar() {
+export default function Sidebar({ artists }) {
   return (
     <aside className="home-sidebar">
       <section>
         <h3>Trending Artists</h3>
-        <ul>
-          <li>Ministri</li>
-          <li>Charli xcx</li>
-          <li>Brockhampton</li>
-          <li>Linkin Park</li>
-          <li>Tyler, the Creator</li>
-        </ul>
-      </section>
-      <section>
-        <h3>Newest Members</h3>
-        <ul>
-          <li>Claudina</li>
-          <li>Davide</li>
-          <li>Danilo</li>
-        </ul>
+
+        {artists.length === 0 ? (
+          <p>No trending artists yet.</p>
+        ) : (
+          <ol>
+            {artists.map((artist) => (
+              <li key={artist.artist}>
+                <span>{artist.artist}</span>
+              </li>
+            ))}
+          </ol>
+        )}
       </section>
     </aside>
   );

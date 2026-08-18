@@ -1,9 +1,12 @@
 import { useEffect, useRef, useState } from "react";
+import { useAuth } from "../../context/AuthContext";
 import { search } from "../../api/endpoints";
 
 import SearchDropdown from "./SearchDropDown";
 
 export default function SearchBar() {
+  const { user: currentUser } = useAuth();
+
   const [query, setQuery] = useState("");
   const [results, setResults] = useState(null);
   const [open, setOpen] = useState(false);
@@ -31,15 +34,13 @@ export default function SearchBar() {
     }, 300);
 
     return () => clearTimeout(timeout.current);
-
   }, [query]);
 
   return (
     <div className="search-container">
-
       <input
         className="search-input"
-        placeholder="Search users, artists, albums..."
+        placeholder="Search users..."
         value={query}
         onChange={(e) => setQuery(e.target.value)}
       />
@@ -47,10 +48,10 @@ export default function SearchBar() {
       {open && results && (
         <SearchDropdown
           results={results}
+          currentUser={currentUser}
           close={() => setOpen(false)}
         />
       )}
-
     </div>
   );
 }

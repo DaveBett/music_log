@@ -37,8 +37,8 @@ export function AuthProvider({ children }) {
     setLoading(false);
   }
 
-  async function signIn(email, password) {
-    const data = await login(email, password);
+  async function signIn(loginValue, password) {
+    const data = await login(loginValue, password);
 
     localStorage.setItem("token", data.token);
     setUser(data.user);
@@ -82,6 +82,13 @@ export function AuthProvider({ children }) {
     );
   }
 
+  const updateAvatar = (avatarUrl) => {
+    setUser(prev => ({
+      ...prev,
+      avatar_url: avatarUrl
+    }));
+  };
+
   return (
     <AuthContext.Provider
       value={{
@@ -92,7 +99,8 @@ export function AuthProvider({ children }) {
         signUp,
         signOut,
         updateProfile: updateProfileInfo,
-        changePassword
+        changePassword,
+        updateAvatar,
       }}
     >
       {children}

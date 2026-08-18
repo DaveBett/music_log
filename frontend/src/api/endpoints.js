@@ -86,12 +86,10 @@ export const update_entry = async (
   return response.data;
 };
 
-// User Auth
-
-export const login = async (email, password) => {
+export const login = async (loginValue, password) => {
   const response = await api.post("/login", {
     user: {
-      email,
+      loginValue,
       password
     }
   });
@@ -352,6 +350,56 @@ export const resendVerificationEmail = async (email) => {
     "/resend-confirmation",
     {
       email
+    }
+  );
+
+  return response.data;
+};
+
+export const getTrending = async () => {
+  const response = await api.get("/trending");
+  return response.data;
+};
+
+export const updateAvatar = async (file) => {
+  const formData = new FormData();
+  formData.append("avatar", file);
+
+  const response = await api.patch(
+    "/me/avatar",
+    formData,
+    {
+      headers: {
+        "Content-Type": "multipart/form-data"
+      }
+    }
+  );
+
+  return response.data;
+};
+
+export const forgotPassword = async (email) => {
+  const response = await api.post(
+    "/password/forgot",
+    {
+      email
+    }
+  );
+
+  return response.data;
+};
+
+export const resetPassword = async (
+  token,
+  password,
+  passwordConfirmation
+) => {
+  const response = await api.patch(
+    "/password/reset",
+    {
+      reset_password_token: token,
+      password,
+      password_confirmation: passwordConfirmation
     }
   );
 

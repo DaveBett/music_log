@@ -1,40 +1,38 @@
 import { Link } from "react-router-dom";
+import { useAuth } from "../../context/AuthContext";
+import Avatar from "../Avatar";
 
 export default function ActivityCard({ activity }) {
+  const { user: currentUser } = useAuth();
+
   const {
     user,
     type,
     data,
-    created_at
+    created_at,
   } = activity;
+
+  const getProfilePath = (username) => {
+    return currentUser?.username === username
+      ? "/profile"
+      : `/user/${username}`;
+  };
 
   return (
     <article className="activity-card">
-
-      <div className="activity-avatar">
-      </div>
-
+      <Avatar src={user.avatar_url} username={user.username} size={42} />
       <div className="activity-content">
-
-        <Link
-          to={`/user/${user.username}`}
-          className="activity-user"
-        >
-          <strong>
-            {user.username}
-          </strong>
-        </Link>
+      <Link to={getProfilePath(user.username)} className="activity-user">
+        <strong>{user.username}</strong>
+      </Link>
 
         {type === "log" && (
           <p>
             logged{" "}
-
             <strong>
               {data.album}
             </strong>
-
             {" by "}
-
             {data.artist}
           </p>
         )}
@@ -43,16 +41,11 @@ export default function ActivityCard({ activity }) {
           <p>
             reviewed{" "}
 
-            <Link
-              to={`/reviews/${data.review_id}`}
-              className="activity-review-link"
-            >
+            <Link to={`/reviews/${data.review_id}`} className="activity-review-link">
               <strong>
                 {data.album}
               </strong>
-
               {" by "}
-
               {data.artist}
             </Link>
           </p>
@@ -61,25 +54,15 @@ export default function ActivityCard({ activity }) {
         {type === "follow" && (
           <p>
             followed{" "}
-
-            <Link
-              to={`/user/${data.user_id}`}
-            >
-              <strong>
-                {data.username}
-              </strong>
+            <Link to={getProfilePath(user.username)} className="activity-user">
+              <strong>{user.username}</strong>
             </Link>
           </p>
         )}
-
         <span>
-          {formatActivityDate(
-            created_at
-          )}
+          {formatActivityDate(created_at)}
         </span>
-
       </div>
-
     </article>
   );
 }

@@ -26,6 +26,9 @@ const EntryList = ({
 
   return (
     <div className="entry-list">
+      <div className="musicbrainz-searching">
+          Click on any album name to leave a review.
+      </div>
       <div className="entry-legend">
         <h3 className="small">#</h3>
         <h3 className="medium">Listened</h3>

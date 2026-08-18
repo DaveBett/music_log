@@ -113,7 +113,7 @@
   font-size: .95rem;
 }
 
-.search-dropdown{
+.search-dropdown {
   position:absolute;
   top:110%;
   left:0;
@@ -126,7 +126,7 @@
   z-index:100;
 }
 
-.search-item{
+.search-item {
   display:flex;
   justify-content:space-between;
   padding:12px 16px;
@@ -139,8 +139,17 @@
   background:#f5f5f5;
 }
 
-.search-dropdown h4{
+.search-dropdown {
   padding:12px 16px 4px;
   font-size:.75rem;
   color:#121212;
+}
+
+.search-result {
+  display: flex;
+  padding: 1rem 0;
+  color: #121212;
+  align-items: center;
+  gap: 1rem;
+  font-size: 16px;
 }

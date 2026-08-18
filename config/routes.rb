@@ -11,6 +11,7 @@ Rails.application.routes.draw do
     patch  "me",              to: "users#update"
     patch  "me/password",     to: "users#update_password"
     delete "me",              to: "users#delete"
+    patch  "me/avatar",       to: "users#update_avatar"
 
     patch "settings/password", to: "settings#password"
     delete "settings",         to: "settings#destroy"
@@ -29,6 +30,11 @@ Rails.application.routes.draw do
     get "/verify-email",         to: "email_verifications#show"
     post "/verify-email/resend", to: "email_verifications#resend"
     post "/resend-confirmation", to: "users#resend_confirmation"
+
+    get "trending", to: "home#trending"
+
+    post "password/forgot", to: "password_resets#create"
+    patch "password/reset", to: "password_resets#update"
 
     resources :entries do
       resource :review, only: %i[show create]

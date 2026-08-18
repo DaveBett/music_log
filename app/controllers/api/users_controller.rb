@@ -1,12 +1,13 @@
 class Api::UsersController < ApplicationController
   before_action :authenticate_user!,
-    except: [ :login, :register, :verify_email, :resend_confirmation ]
+    except: [ :login, :register, :resend_confirmation ]
 
   def me
     render json: {
       id: current_user.id,
       username: current_user.username,
-      email: current_user.email
+      email: current_user.email,
+      avatar_url: avatar_url(current_user)
     }
   end
 
@@ -29,46 +30,47 @@ class Api::UsersController < ApplicationController
   end
 
   def login
-    credentials = params.require(:user).permit(:email, :password)
+    credentials = params.require(:user).permit(
+      :loginValue,
+      :password
+    )
 
-    user = User.find_by(email: credentials[:email])
+    login_value = credentials[:loginValue].to_s.strip
 
-    if user&.valid_password?(credentials[:password])
-      unless user.email_verified?
-        return render json: {
-          error: "Please confirm your email address before logging in."
-        }, status: :forbidden
+    user =
+      if login_value.include?("@")
+        User.find_by(
+          "LOWER(email) = ?",
+          login_value.downcase
+        )
+      else
+        User.find_by(
+          username: login_value
+        )
       end
 
-      token, _payload =
-        Warden::JWTAuth::UserEncoder.new.call(user, :user, nil)
-
-      render json: {
-        user: user_json(user),
-        token: token
-      }
-    else
-      render json: {
-        error: "Invalid email or password"
+    unless user&.valid_password?(credentials[:password])
+      return render json: {
+        error: "Invalid username/email or password."
       }, status: :unauthorized
     end
-  end
 
-  def verify_email
-    token = params[:token]
-
-    user = User.find_by_email_verification_token(token)
-
-    unless user
+    unless user.email_verified?
       return render json: {
-        error: "This verification link is invalid or has expired."
-      }, status: :unprocessable_entity
+        error: "Please confirm your email address before logging in."
+      }, status: :forbidden
     end
 
-    user.verify_email!
+    token, _payload =
+      Warden::JWTAuth::UserEncoder.new.call(
+        user,
+        :user,
+        nil
+      )
 
     render json: {
-      message: "Your email has been verified successfully."
+      user: user_json(user),
+      token: token
     }
   end
 
@@ -132,7 +134,8 @@ class Api::UsersController < ApplicationController
       user: {
         id: user.id,
         username: user.username,
-        created_at: user.created_at
+        created_at: user.created_at,
+        avatar_url: avatar_url(user)
       },
       stats: {
         logs: user.entries.count,
@@ -151,7 +154,8 @@ class Api::UsersController < ApplicationController
         id: current_user.id,
         username: current_user.username,
         email: current_user.email,
-        created_at: current_user.created_at
+        created_at: current_user.created_at,
+        avatar_url: avatar_url(current_user)
       },
 
       stats: {
@@ -174,13 +178,28 @@ class Api::UsersController < ApplicationController
     }
   end
 
+  def update_avatar
+    if params[:avatar].blank?
+      return render json: {
+        error: "No image provided."
+      }, status: :bad_request
+    end
+
+    current_user.avatar.attach(params[:avatar])
+
+    render json: {
+      avatar_url: avatar_url(current_user)
+    }
+  end
+
   private
 
   def user_json(user)
     {
       id: user.id,
       username: user.username,
-      email: user.email
+      email: user.email,
+      avatar_url: avatar_url(user)
     }
   end
 
@@ -219,5 +238,11 @@ class Api::UsersController < ApplicationController
       )
       .limit(1)
       .pick(:name)
+  end
+
+  def avatar_url(user)
+    return nil unless user.avatar.attached?
+
+    url_for(user.avatar)
   end
 end

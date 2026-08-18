@@ -3,37 +3,36 @@ class Api::SearchController < ApplicationController
 
   def index
     query = params[:q].to_s.strip
+
     users =
-      User
-        .where("LOWER(username) LIKE ?", "%#{query.downcase}%")
-        .limit(5)
-    artists =
-      Entry
-        .where("LOWER(artist) LIKE ?", "%#{query.downcase}%")
-        .distinct
-        .limit(5)
-        .pluck(:artist)
-    albums =
-      Entry
-        .where("LOWER(title) LIKE ?", "%#{query.downcase}%")
-        .distinct
-        .limit(5)
-        .pluck(:title, :artist)
+      if query.present?
+        User
+          .where(
+            "username LIKE ?",
+            "%#{User.sanitize_sql_like(query)}%"
+          )
+          .order(:username)
+          .limit(10)
+      else
+        User.none
+      end
+
     render json: {
-      users: users.map do |u|
+      users: users.map do |user|
         {
-          id: u.id,
-          username: u.username
+          id: user.id,
+          username: user.username,
+          avatar_url: avatar_url(user)
         }
-      end,
-      artists: artists,
-      albums: albums.map do |title, artist|
-        {
-          title: title,
-          artist: artist
-        }
-      end,
-      reviews: []
+      end
     }
+  end
+
+  private
+
+  def avatar_url(user)
+    return nil unless user.avatar.attached?
+
+    url_for(user.avatar)
   end
 end

@@ -9,3 +9,9 @@
 .settings-page h1 {
   margin: 0;
 }
+
+.avatar-settings {
+  padding-left: 2rem;
+  display: flex;
+  gap: 1rem;
+}

@@ -12,6 +12,19 @@ class UserMailer < ApplicationMailer
     )
   end
 
+  def password_reset(user, token)
+    @user = user
+    @token = token
+
+    @reset_url =
+      "#{frontend_url}/reset-password?token=#{CGI.escape(@token)}"
+
+    mail(
+      to: @user.email,
+      subject: "Reset your MusicLog password"
+    )
+  end
+
   private
 
   def frontend_url

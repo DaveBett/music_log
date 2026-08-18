@@ -7,7 +7,7 @@ import TrendingSection from "../components/home/TrendingSection";
 import Sidebar from "../components/home/Sidebar";
 import AddEntry from "../components/AddEntry";
 
-import { getFeed, create_entry, } from "../api/endpoints";
+import { getFeed, create_entry, getTrending } from "../api/endpoints";
 
 import "./HomePage.css";
 
@@ -17,10 +17,15 @@ export default function HomePage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [editingEntry, setEditingEntry] = useState(null);
+  const [trending, setTrending] = useState({artists: [], albums: []})
 
   useEffect(() => {
     loadFeed();
   }, [activeTab]);
+
+  useEffect(() => {
+    loadTrending();
+  }, []);
 
   async function loadFeed() {
     setLoading(true);
@@ -39,6 +44,15 @@ export default function HomePage() {
     }
   }
 
+  async function loadTrending() {
+    try {
+      const data = await getTrending();
+      setTrending(data);
+    } catch (err) {
+      console.error("Unable to load trending data:", err);
+    }
+  }
+
   async function addEntry(
     artist,
     title,
@@ -54,6 +68,8 @@ export default function HomePage() {
       musicbrainzUrl
     );
     await loadFeed();
+    await loadTrending();
+
     return entry;
   }
 
@@ -80,9 +96,9 @@ export default function HomePage() {
             error={error}
           />
         </main>
-        <Sidebar />
+        <Sidebar artists={trending.artists}/>
       </div>
-      <TrendingSection />
+      <TrendingSection albums={trending.albums}/>
     </div>
   );
 }

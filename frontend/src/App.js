@@ -15,6 +15,8 @@ import EditReviewPage from "./pages/EditReviewPage"
 import ErrorPage from './pages/ErrorPage';
 import VerifyEmailPage from './pages/VerifyEmailPage';
 import CheckEmailPage from './pages/CheckEmailPage';
+import ForgotPasswordPage from './pages/ForgotPasswordPage';
+import ResetPasswordPage from './pages/ResetPasswordPage';
 
 import ProtectedRoute from "./components/ProtectedRoute";
 import AppLayout from "./components/AppLayout";
@@ -100,6 +102,8 @@ const App = () => {
         <Route path="/verify-email" element={<VerifyEmailPage />} />
         <Route path="/check-email" element={<CheckEmailPage />} />
         <Route path="*" element={<ErrorPage statusCode={404} />} />
+        <Route path="/forgot-password" element={<ForgotPasswordPage />} />
+        <Route path="/reset-password" element={<ResetPasswordPage />} />
       </Routes>
     );
 };
