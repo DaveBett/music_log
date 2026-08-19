@@ -1,4 +1,4 @@
-class Api::EntriesController < Api::BaseController
+class Api::SettingsController < ApplicationController
   def show
     render json: {
       username: current_user.username,

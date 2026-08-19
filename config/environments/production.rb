@@ -87,4 +87,21 @@ Rails.application.configure do
   #
   # Skip DNS rebinding protection for the default health check endpoint.
   # config.host_authorization = { exclude: ->(request) { request.path == "/up" } }
+
+  config.x.frontend_url = ENV.fetch(
+    "FRONTEND_URL",
+    "http://localhost:3001"
+  )
+
+  config.action_mailer.smtp_settings = {
+    address: "smtp.gmail.com",
+    port: 587,
+    domain: "gmail.com",
+    user_name: Rails.application.credentials.dig(:smtp, :user_name),
+    password: Rails.application.credentials.dig(:smtp, :password),
+    authentication: :plain,
+    enable_starttls: true,
+    open_timeout: 5,
+    read_timeout: 5
+  }
 end
