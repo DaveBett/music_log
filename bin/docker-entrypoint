@@ -1,9 +1,10 @@
 #!/bin/bash -e
 
 if [ "${@: -2:1}" == "./bin/rails" ] && [ "${@: -1:1}" == "server" ]; then
-  echo "==> Eseguo db:prepare..."
+  echo "==> Preparo database primary..."
   ./bin/rails db:prepare
-  echo "==> db:prepare completato con successo"
+  echo "==> Migro esplicitamente cache/queue/cable..."
+  ./bin/rails db:migrate:cache db:migrate:queue db:migrate:cable
 fi
 
 exec "${@}"
