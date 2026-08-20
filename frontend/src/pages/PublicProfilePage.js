@@ -26,19 +26,19 @@ export default function PublicProfilePage() {
   const [following, setFollowing] = useState(false);
 
   useEffect(() => {
+    async function loadProfile() {
+      try {
+        const data = await getPublicProfile(username);
+  
+        setProfile(data);
+        setFollowing(data.following);
+      } catch (err) {
+        console.error("Unable to load public profile:", err);
+      }
+    }
     loadProfile();
   }, [username]);
 
-  async function loadProfile() {
-    try {
-      const data = await getPublicProfile(username);
-
-      setProfile(data);
-      setFollowing(data.following);
-    } catch (err) {
-      console.error("Unable to load public profile:", err);
-    }
-  }
 
   const handleFollow = async () => {
     try {

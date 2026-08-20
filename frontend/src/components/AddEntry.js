@@ -16,12 +16,6 @@ const AddEntry = ({
 
   const isEditingRef = useRef(false);
 
-  /*
-   * Populate the form when editing an existing entry.
-   *
-   * This should NOT run every time the search query changes.
-   */
-
   useEffect(() => {
     if (!editingEntry) {
       isEditingRef.current = false;
@@ -50,21 +44,15 @@ const AddEntry = ({
     setResults([]);
     setSuccessMessage("");
     setErrorMessage("");
-  }, [editingEntry?.id]);
+  }, [editingEntry]);
 
-  /*
-   * Debounced MusicBrainz search.
-   */
   useEffect(() => {
-    // Don't search an empty query.
     if (!query.trim()) {
       setResults([]);
       setSearching(false);
       return;
     }
 
-    // If an album has just been selected, don't search
-    // the formatted "Artist - Album" value.
     if (selectedAlbum) {
       return;
     }
@@ -81,10 +69,10 @@ const AddEntry = ({
       } catch (error) {
         console.error(
           "MusicBrainz search failed:",
-          error,
-          setErrorMessage(
-            "Unable to search for albums. Please try again."
-          )
+          error
+        );
+        setErrorMessage(
+          "Unable to search for albums. Please try again."
         );
 
         setResults([]);

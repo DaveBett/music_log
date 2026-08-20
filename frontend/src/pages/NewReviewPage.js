@@ -24,30 +24,29 @@ export default function NewReviewPage() {
   const [error, setError] = useState("");
 
   useEffect(() => {
+    async function loadEntry() {
+      if (!entryId) {
+        setError("No album was selected.");
+        setLoading(false);
+        return;
+      }
+  
+      try {
+        setLoading(true);
+        setError("");
+  
+        const data = await get_entry(entryId);
+  
+        setEntry(data);
+      } catch (err) {
+        console.error(err);
+        setError("Unable to load album.");
+      } finally {
+        setLoading(false);
+      }
+    }
     loadEntry();
   }, [entryId]);
-
-  async function loadEntry() {
-    if (!entryId) {
-      setError("No album was selected.");
-      setLoading(false);
-      return;
-    }
-
-    try {
-      setLoading(true);
-      setError("");
-
-      const data = await get_entry(entryId);
-
-      setEntry(data);
-    } catch (err) {
-      console.error(err);
-      setError("Unable to load album.");
-    } finally {
-      setLoading(false);
-    }
-  }
 
   async function handleSubmit(event) {
     event.preventDefault();

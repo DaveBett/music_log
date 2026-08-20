@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 
 import HeroSection from "../components/home/HeroSection";
 import FeedTabs from "../components/home/FeedTabs";
@@ -19,30 +19,22 @@ export default function HomePage() {
   const [editingEntry, setEditingEntry] = useState(null);
   const [trending, setTrending] = useState({artists: [], albums: []})
 
-  useEffect(() => {
-    loadFeed();
-  }, [activeTab]);
-
-  useEffect(() => {
-    loadTrending();
-  }, []);
-
-  async function loadFeed() {
+  const loadFeed = useCallback(async () => {
     setLoading(true);
     setError("");
-
+  
     try {
       const data = await getFeed(activeTab);
-
+  
       setActivities(data);
     } catch (err) {
       console.error(err);
-
+  
       setError("Unable to load the activity feed.");
     } finally {
       setLoading(false);
     }
-  }
+  }, [activeTab]);
 
   async function loadTrending() {
     try {
@@ -52,6 +44,14 @@ export default function HomePage() {
       console.error("Unable to load trending data:", err);
     }
   }
+
+  useEffect(() => {
+    loadFeed();
+  }, [loadFeed]);
+
+  useEffect(() => {
+    loadTrending();
+  }, []);
 
   async function addEntry(
     artist,

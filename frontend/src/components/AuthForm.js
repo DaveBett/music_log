@@ -70,6 +70,19 @@ export default function AuthForm({ mode }) {
 
       {error && <div className="auth-error">{error}</div>}
 
+      {isRegister && (
+        <input
+          id="username"
+          className="auth-input"
+          type="text"
+          placeholder="Username"
+          value={username}
+          onChange={(e) => setUsername(e.target.value)}
+          autoComplete="username"
+          required
+        />
+      )}
+
       {isRegister ? (
         <input
           id="email"

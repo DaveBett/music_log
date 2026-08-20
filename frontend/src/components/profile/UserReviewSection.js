@@ -17,26 +17,26 @@ export default function UserReviewSection({
   const [error, setError] = useState("");
 
   useEffect(() => {
+    async function loadReviews() {
+      try {
+        setLoading(true);
+        setError("");
+  
+        const data = editable
+          ? await getReviews()
+          : await getUserReviews(username);
+  
+        setReviews(data);
+      } catch (err) {
+        console.error(err);
+        setError("Unable to load reviews.");
+      } finally {
+        setLoading(false);
+      }
+    }
     loadReviews();
   }, [username, editable]);
 
-  async function loadReviews() {
-    try {
-      setLoading(true);
-      setError("");
-
-      const data = editable
-        ? await getReviews()
-        : await getUserReviews(username);
-
-      setReviews(data);
-    } catch (err) {
-      console.error(err);
-      setError("Unable to load reviews.");
-    } finally {
-      setLoading(false);
-    }
-  }
 
   async function handleDelete(reviewId) {
     const confirmed = window.confirm(

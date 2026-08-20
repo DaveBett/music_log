@@ -24,30 +24,30 @@ export default function EditReviewPage() {
   const [error, setError] = useState("");
 
   useEffect(() => {
+    async function loadReview() {
+      try {
+        setLoading(true);
+        setError("");
+  
+        const data = await getReview(reviewId);
+  
+        setReview(data);
+  
+        setTitle(data.title || "");
+        setRating(data.rating ?? "");
+        setBody(data.body || "");
+  
+      } catch (err) {
+        console.error(err);
+  
+        setError("Unable to load review.");
+      } finally {
+        setLoading(false);
+      }
+    }
     loadReview();
   }, [reviewId]);
 
-  async function loadReview() {
-    try {
-      setLoading(true);
-      setError("");
-
-      const data = await getReview(reviewId);
-
-      setReview(data);
-
-      setTitle(data.title || "");
-      setRating(data.rating ?? "");
-      setBody(data.body || "");
-
-    } catch (err) {
-      console.error(err);
-
-      setError("Unable to load review.");
-    } finally {
-      setLoading(false);
-    }
-  }
 
   async function handleSubmit(event) {
     event.preventDefault();
