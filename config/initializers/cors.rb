@@ -1,5 +1,5 @@
 frontend_url = ENV.fetch(
-  ENV["FRONTEND_URL"],
+  "FRONTEND_URL",
   "http://localhost:3001"
 )
 
