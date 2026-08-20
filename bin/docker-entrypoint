@@ -4,10 +4,19 @@ if [ "${@: -2:1}" == "./bin/rails" ] && [ "${@: -1:1}" == "server" ]; then
   echo "==> Preparo database primary..."
   ./bin/rails db:prepare
 
-  echo "==> Carico schema per cache/queue/cable..."
-  ./bin/rails db:schema:load:cache
-  ./bin/rails db:schema:load:queue
-  ./bin/rails db:schema:load:cable
+  echo "==> Verifico/carico schema cache..."
+  ./bin/rails runner "exit(ActiveRecord::Base.connection.table_exists?('solid_cache_entries') ? 1 : 0)" \
+    || DISABLE_DATABASE_ENVIRONMENT_CHECK=1 ./bin/rails db:schema:load:cache
+
+  echo "==> Verifico/carico schema queue..."
+  ./bin/rails runner "exit(ActiveRecord::Base.connection.table_exists?('solid_queue_jobs') ? 1 : 0)" \
+    || DISABLE_DATABASE_ENVIRONMENT_CHECK=1 ./bin/rails db:schema:load:queue
+
+  echo "==> Verifico/carico schema cable..."
+  ./bin/rails runner "exit(ActiveRecord::Base.connection.table_exists?('solid_cable_messages') ? 1 : 0)" \
+    || DISABLE_DATABASE_ENVIRONMENT_CHECK=1 ./bin/rails db:schema:load:cable
+
+  echo "==> Setup database completato"
 fi
 
 exec "${@}"
