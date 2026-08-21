@@ -212,6 +212,28 @@ class MusicBrainzService
   end
 
   def self.make_request(uri)
+    attempts = 0
+
+    loop do
+      response = perform_request(uri)
+
+      if response.code == "503" && attempts < 2
+        attempts += 1
+        Rails.logger.warn("MusicBrainz busy (503), retrying in 1.5s... (attempt #{attempts})")
+        sleep(1.5)
+        next
+      end
+
+      unless response.is_a?(Net::HTTPSuccess)
+        Rails.logger.error("MusicBrainz returned #{response.code}: #{response.body}")
+        raise "MusicBrainz API returned HTTP #{response.code}"
+      end
+
+      return JSON.parse(response.body)
+    end
+  end
+
+  def self.perform_request(uri)
     MUTEX.synchronize do
       wait_for_rate_limit
 
@@ -231,13 +253,7 @@ class MusicBrainzService
         end
 
       @last_request_at = Time.now
-
-      unless response.is_a?(Net::HTTPSuccess)
-        Rails.logger.error("MusicBrainz returned #{response.code}: #{response.body}")
-        raise "MusicBrainz API returned HTTP #{response.code}"
-      end
-
-      JSON.parse(response.body)
+      response
     end
   end
 
