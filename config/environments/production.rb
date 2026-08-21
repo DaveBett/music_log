@@ -94,14 +94,14 @@ Rails.application.configure do
   )
 
   config.action_mailer.smtp_settings = {
-  address: "smtp.gmail.com",
+  address: "smtp.resend.com",
   port: 587,
-  domain: "gmail.com",
-  user_name: ENV.fetch("SMTP_USERNAME", nil),
-  password: ENV.fetch("SMTP_PASSWORD", nil),
+  domain: ENV.fetch("MAILER_DOMAIN", nil),
+  user_name: "resend",
+  password: ENV.fetch("RESEND_API_KEY", nil),
   authentication: :plain,
   enable_starttls: true,
-  open_timeout: 5,
-  read_timeout: 5
+  open_timeout: 15,
+  read_timeout: 15
 }
 end

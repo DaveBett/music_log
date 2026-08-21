@@ -1,4 +1,4 @@
 class ApplicationMailer < ActionMailer::Base
-  default from: "MusicLog <davidebetteriniweb@gmail.com>"
+  default from: "noreply@musicloggr.com"
   layout "mailer"
 end
