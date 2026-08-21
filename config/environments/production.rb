@@ -93,15 +93,17 @@ Rails.application.configure do
     "http://localhost:3001"
   )
 
-  config.action_mailer.smtp_settings = {
-  address: "smtp.resend.com",
-  port: 587,
-  domain: ENV.fetch("MAILER_DOMAIN", nil),
-  user_name: "resend",
-  password: ENV.fetch("RESEND_API_KEY", nil),
-  authentication: :plain,
-  enable_starttls: true,
-  open_timeout: 15,
-  read_timeout: 15
-}
+  # config.action_mailer.smtp_settings = {
+  #   address: "smtp.resend.com",
+  #   port: 587,
+  #   domain: ENV.fetch("MAILER_DOMAIN", nil),
+  #   user_name: "resend",
+  #   password: ENV.fetch("RESEND_API_KEY", nil),
+  #   authentication: :plain,
+  #   enable_starttls: true,
+  #   open_timeout: 15,
+  #   read_timeout: 15
+  # }
+
+  config.action_mailer.delivery_method = :resend
 end
