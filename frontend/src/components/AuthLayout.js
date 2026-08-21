@@ -5,7 +5,7 @@ export default function AuthLayout({ children }) {
     <div className="auth-page">
       <section className="auth-left">
         <div className="brand">
-          <h1>Music Log</h1>
+          <h1>Musicloggr</h1>
           <p className="subtitle">
             Your personal music journal.
           </p>

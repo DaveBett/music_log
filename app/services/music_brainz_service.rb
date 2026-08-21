@@ -12,33 +12,24 @@ class MusicBrainzService
   USER_AGENT =
     "MusicLog/1.0 (dattero96@gmail.com)"
 
-  def self.search_albums(query)
-    query = query.to_s.strip
+    def self.search_albums(query)
+      query = query.to_s.strip
+      return [] if query.blank?
 
-    return [] if query.blank?
+      cache_key = "musicbrainz:full_search:#{query.downcase}"
 
-    artists = search_artists(query)
+      Rails.cache.fetch(cache_key, expires_in: 24.hours) do
+        artists = search_artists(query)
+        primary_artist = find_primary_artist(artists, query)
 
-    primary_artist =
-      find_primary_artist(
-        artists,
-        query
-      )
-
-    if primary_artist
-      Rails.logger.info(
-        "MusicBrainz matched artist: " \
-        "#{primary_artist["name"]} " \
-        "(#{primary_artist["id"]})"
-      )
-
-      return search_release_groups_for_artist(
-        primary_artist["id"]
-      )
+        if primary_artist
+          Rails.logger.info("MusicBrainz matched artist: #{primary_artist["name"]} (#{primary_artist["id"]})")
+          search_release_groups_for_artist(primary_artist["id"])
+        else
+          search_general_albums(query)
+        end
+      end
     end
-
-    search_general_albums(query)
-  end
 
   def self.get_release_group(release_group_id)
     return nil if release_group_id.blank?
@@ -130,24 +121,20 @@ class MusicBrainzService
   end
 
   def self.search_release_groups_for_artist(artist_id)
-    uri = URI(RELEASE_GROUP_URL)
-
-    uri.query = URI.encode_www_form(
-      artist: artist_id,
-      type: "album|ep",
-      inc: "artist-credits",
-      fmt: "json",
-      limit: 100
-    )
-
-    Rails.logger.info(
-      "MusicBrainz artist release-group request: #{uri}"
-    )
-
-    data = make_request(uri)
-
-    parse_release_groups(data)
-  end
+    Rails.cache.fetch("musicbrainz:artist_releases:#{artist_id}", expires_in: 24.hours) do
+      uri = URI(RELEASE_GROUP_URL)
+      uri.query = URI.encode_www_form(
+        artist: artist_id,
+        type: "album|ep",
+        inc: "artist-credits",
+        fmt: "json",
+        limit: 100
+      )
+  
+      Rails.logger.info("MusicBrainz artist release-group request: #{uri}")
+      data = make_request(uri)
+      parse_release_groups(data)
+    end
 
   def self.search_general_albums(query)
     uri = URI(RELEASE_GROUP_URL)
@@ -221,20 +208,17 @@ class MusicBrainzService
   end
 
   def self.make_request(uri)
-    request =
-      Net::HTTP::Get.new(uri)
-
-    request["User-Agent"] =
-      USER_AGENT
-
-    request["Accept"] =
-      "application/json"
+    request = Net::HTTP::Get.new(uri)
+    request["User-Agent"] = USER_AGENT
+    request["Accept"] = "application/json"
 
     response =
       Net::HTTP.start(
         uri.hostname,
         uri.port,
-        use_ssl: true
+        use_ssl: true,
+        open_timeout: 5,
+        read_timeout: 5
       ) do |http|
         http.request(request)
       end
