@@ -12,6 +12,9 @@ class MusicBrainzService
   USER_AGENT =
     "MusicLog/1.0 (dattero96@gmail.com)"
 
+  MUTEX = Mutex.new
+  MIN_INTERVAL = 1.05
+
     def self.search_albums(query)
       query = query.to_s.strip
       return [] if query.blank?
@@ -209,34 +212,39 @@ class MusicBrainzService
   end
 
   def self.make_request(uri)
-    request = Net::HTTP::Get.new(uri)
-    request["User-Agent"] = USER_AGENT
-    request["Accept"] = "application/json"
+    MUTEX.synchronize do
+      wait_for_rate_limit
 
-    response =
-      Net::HTTP.start(
-        uri.hostname,
-        uri.port,
-        use_ssl: true,
-        open_timeout: 5,
-        read_timeout: 5
-      ) do |http|
-        http.request(request)
+      request = Net::HTTP::Get.new(uri)
+      request["User-Agent"] = USER_AGENT
+      request["Accept"] = "application/json"
+
+      response =
+        Net::HTTP.start(
+          uri.hostname,
+          uri.port,
+          use_ssl: true,
+          open_timeout: 5,
+          read_timeout: 5
+        ) do |http|
+          http.request(request)
+        end
+
+      @last_request_at = Time.now
+
+      unless response.is_a?(Net::HTTPSuccess)
+        Rails.logger.error("MusicBrainz returned #{response.code}: #{response.body}")
+        raise "MusicBrainz API returned HTTP #{response.code}"
       end
 
-    unless response.is_a?(Net::HTTPSuccess)
-      Rails.logger.error(
-        "MusicBrainz returned #{response.code}: " \
-        "#{response.body}"
-      )
-
-      raise(
-        "MusicBrainz API returned HTTP #{response.code}"
-      )
+      JSON.parse(response.body)
     end
+  end
 
-    JSON.parse(
-      response.body
-    )
+  def self.wait_for_rate_limit
+    return unless @last_request_at
+
+    elapsed = Time.now - @last_request_at
+    sleep(MIN_INTERVAL - elapsed) if elapsed < MIN_INTERVAL
   end
 end
