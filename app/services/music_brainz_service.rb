@@ -130,11 +130,12 @@ class MusicBrainzService
         fmt: "json",
         limit: 100
       )
-  
+
       Rails.logger.info("MusicBrainz artist release-group request: #{uri}")
       data = make_request(uri)
       parse_release_groups(data)
     end
+  end
 
   def self.search_general_albums(query)
     uri = URI(RELEASE_GROUP_URL)
