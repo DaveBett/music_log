@@ -19,11 +19,7 @@ export default function ReviewCard({
         <Link to={`/reviews/${review.id}`} className="review-card-link" >
           <div className="review-header">
             {coverUrl && (
-              <img
-                className="review-cover"
-                src={coverUrl}
-                alt={`${entry?.title} album cover`}
-              />
+              <img className="review-cover-large" src={coverUrl} alt={`${entry?.title} album cover`}/>
             )}
             <div className="review-info">
               <h2>
