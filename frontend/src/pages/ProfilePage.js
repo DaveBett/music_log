@@ -51,22 +51,10 @@ export default function ProfilePage() {
 
   return (
     <div className="profile-page">
-
-      <ProfileHeader
-        user={profile.user}
-        stats={profile.stats}
-        isOwnProfile
-      />
-
-      <ProfileTabs
-        activeTab={activeTab}
-        onChange={setActiveTab}
-      />
-
+      <ProfileHeader user={profile.user} stats={profile.stats} isOwnProfile />
+      <ProfileTabs activeTab={activeTab} onChange={setActiveTab} />
       {activeTab === "log" && (
-        <UserLogSection
-          entries={profile.entries}
-        />
+        <UserLogSection entries={profile.entries} />
       )}
 
       {activeTab === "reviews" && (
@@ -79,11 +67,8 @@ export default function ProfilePage() {
       )}
 
       {activeTab === "stats" && (
-        <UserStatSection
-          stats={profile.stats}
-        />
+        <UserStatSection stats={profile.stats} />
       )}
-
     </div>
   );
 }

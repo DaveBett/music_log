@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 import {
   getReviews,
@@ -8,10 +9,9 @@ import {
 
 import ReviewList from "../reviews/ReviewList";
 
-export default function UserReviewSection({
-  username,
-  editable = false
-}) {
+export default function UserReviewSection({ username, editable = false }) {
+  const navigate = useNavigate();
+
   const [reviews, setReviews] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
@@ -21,11 +21,11 @@ export default function UserReviewSection({
       try {
         setLoading(true);
         setError("");
-  
+
         const data = editable
           ? await getReviews()
           : await getUserReviews(username);
-  
+
         setReviews(data);
       } catch (err) {
         console.error(err);
@@ -37,6 +37,9 @@ export default function UserReviewSection({
     loadReviews();
   }, [username, editable]);
 
+  function handleEdit(review) {
+    navigate(`/reviews/${review.id}/edit`);
+  }
 
   async function handleDelete(reviewId) {
     const confirmed = window.confirm(
@@ -49,10 +52,7 @@ export default function UserReviewSection({
 
     try {
       setError("");
-
       await deleteReview(reviewId);
-
-      // Remove it immediately from the UI
       setReviews((currentReviews) =>
         currentReviews.filter(
           (review) => review.id !== reviewId
@@ -96,6 +96,7 @@ export default function UserReviewSection({
       <ReviewList
         reviews={reviews}
         editable={editable}
+        onEdit={editable ? handleEdit : undefined}
         onDelete={editable ? handleDelete : undefined}
       />
     </section>

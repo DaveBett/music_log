@@ -42,19 +42,13 @@ export default function Navbar() {
       </Link>
 
       <SearchBar />
-
       <div className="navbar-user" ref={dropdownRef}>
-        <button
-          className="profile-button"
-          onClick={() => setOpen(!open)}
-        >
-          <Avatar src={user.avatar_url} username={user.username} size={34}/>
-
+        <button className="profile-button" onClick={() => setOpen(!open)}>
+          <div className="navbar-avatar">
+            <Avatar src={user.avatar_url} username={user.username} size={34}/>
+          </div>
           <span>{user?.username}</span>
-
-          <FaChevronDown
-            className={open ? "rotate" : ""}
-          />
+          <FaChevronDown className={open ? "rotate" : ""} />
         </button>
 
         {open && (
@@ -62,20 +56,13 @@ export default function Navbar() {
             <div>{user?.email}</div>
 
             <hr />
-            <Link
-              to="/profile"
-              onClick={() => setOpen(false)}
-            >
-              My Profile
-            </Link>
+              <Link to="/profile" onClick={() => setOpen(false)}>
+                My Profile
+              </Link>
 
-            <Link
-              to="/settings"
-              onClick={() => setOpen(false)}
-            >
-              Settings
-            </Link>
-
+              <Link to="/settings" onClick={() => setOpen(false)}>
+                Settings
+              </Link>
             <hr />
 
             <button onClick={handleLogout}>

@@ -45,7 +45,6 @@ form {
 
 .entry {
   border-radius: 8px;
-  min-height: 100px;
   width: 100%;
   transition: background-color 300ms, border-color 300ms;
 }
@@ -533,6 +532,10 @@ form {
 
 @media (max-width: 400px) {
 
+  .app-content {
+    padding: 0;
+  }
+  
   .app-container {
     padding: 0 0.75rem;
   }
@@ -542,7 +545,8 @@ form {
   }
 
   .entry-container {
-    grid-template-columns: 34px 1fr 30px;
+    display: flex;
+    justify-content: space-between;
     padding: 12px;
     gap: 3px 8px;
   }
@@ -551,6 +555,7 @@ form {
     width: 34px;
     font-size: 0.9rem;
   }
+
   .entry-container h3 {
     margin: 0;
     font-size: 0.95rem;
@@ -564,5 +569,9 @@ form {
   .entry-actions svg {
     width: 20px;
     height: 20px;
+  }
+
+  .entry-number, .entry-date {
+    display: none;
   }
 }

@@ -1,7 +1,6 @@
 import { MdOutlineDeleteForever, MdOutlineModeEdit } from "react-icons/md";
 import { Link } from "react-router-dom";
 
-
 const Entry = ({ 
   id, 
   index, 
@@ -16,7 +15,7 @@ const Entry = ({
   confirmDelete,
   setConfirmDeleteId,
   isNew,
-  editable,
+  editable = false,
 }) => {
 
   const classes = [
@@ -72,9 +71,14 @@ const Entry = ({
         <h3 className="entry-date">{added}</h3>
         <h3 className="entry-artist">{artist}</h3>
 
-        <h3 className="entry-album">
-          <Link to={`/reviews/new/${id}`}>{title}</Link>
-        </h3>
+        {editable ? (
+            <h3 className="entry-album">
+              <Link to={`/reviews/new/${id}`}>{title}</Link>
+            </h3>
+          ) : (
+            <h3 className="entry-album">{title}</h3>
+          )
+        }
 
         <h3 className="entry-year">({year})</h3>
 

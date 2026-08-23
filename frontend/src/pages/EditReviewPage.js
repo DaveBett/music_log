@@ -144,32 +144,32 @@ export default function EditReviewPage() {
         </label>
 
         <label className="review-label">
-          Rating
+           Rating
 
-          <select
-            className="auth-input"
-            value={rating}
-            onChange={(e) =>
-              setRating(e.target.value)
-            }
-          >
-            <option value="">
-              No rating
-            </option>
-
-            {Array.from(
-              { length: 10 },
-              (_, index) => (
-                <option
-                  key={index + 1}
-                  value={index + 1}
-                >
-                  {index + 1}
-                </option>
-              )
-            )}
-          </select>
-        </label>
+           <select
+             className="auth-input"
+             value={rating}
+             onChange={(e) =>
+               setRating(e.target.value)
+             }
+           >
+             <option value="">
+               No rating
+             </option>
+           
+             {Array.from(
+               { length: 11 },
+               (_, index) => {
+                 const value = 0 + index * 0.5;
+                 return (
+                   <option key={value} value={value}>
+                     {value}
+                   </option>
+                 );
+               }
+             )}
+           </select>
+          </label>
 
         <label className="review-label">
           Review

@@ -79,6 +79,7 @@ export default function PublicProfilePage() {
       {activeTab === "log" && (
         <PublicLogSection
           entries={profile.entries}
+          editable={false}
         />
       )}
 
@@ -94,9 +95,7 @@ export default function PublicProfilePage() {
           stats={profile.stats}
         />
       )}
-
       <TopButton />
-
     </div>
   );
 }

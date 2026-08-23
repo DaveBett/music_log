@@ -169,12 +169,17 @@
     flex-direction: column;
     text-align: center;
   }
+
   .profile-meta {
     justify-content: center;
     flex-wrap: wrap;
   }
+
   .profile-tabs {
     overflow-x: auto;
   }
 
+  .stats-grid {
+    grid-template-columns: 1fr;
+  }
 }

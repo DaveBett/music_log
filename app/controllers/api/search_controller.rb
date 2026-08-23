@@ -8,7 +8,7 @@ class Api::SearchController < ApplicationController
       if query.present?
         User
           .where(
-            "username LIKE ?",
+            "LOWER(username) LIKE LOWER(?)",
             "%#{User.sanitize_sql_like(query)}%"
           )
           .order(:username)
