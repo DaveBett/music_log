@@ -13,9 +13,3 @@ module ActiveSupport
     # Add more helper methods to be used by all tests here...
   end
 end
-
-
-# Ensure that tests run against fresh webpack assets.
-ActiveSupport::TestCase.setup do
-  ReactOnRails::TestHelper.ensure_assets_compiled
-end
