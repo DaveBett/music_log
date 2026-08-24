@@ -163,6 +163,7 @@ class Api::UsersController < ApplicationController
         reviews: current_user.reviews.count,
         followers: current_user.followers.count,
         following: current_user.following.count,
+        most_logged_artist: most_logged_artist,
         favorite_genre: favorite_genre,
         this_year_logs: current_user.entries
           .where(
@@ -244,5 +245,15 @@ class Api::UsersController < ApplicationController
     return nil unless user.avatar.attached?
 
     url_for(user.avatar)
+  end
+
+  def most_logged_artist
+    current_user.entries
+      .group(:artist)
+      .order(Arel.sql("COUNT(*) DESC"), "artist ASC")
+      .limit(1)
+      .count
+      .keys
+      .first
   end
 end

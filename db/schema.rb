@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_08_23_092329) do
+ActiveRecord::Schema[8.1].define(version: 2026_08_24_090302) do
   create_table "active_storage_attachments", force: :cascade do |t|
     t.bigint "blob_id", null: false
     t.datetime "created_at", null: false
@@ -115,7 +115,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_08_23_092329) do
     t.integer "entry_id", null: false
     t.string "musicbrainz_id"
     t.string "musicbrainz_url"
-    t.decimal "rating", precision: 3, scale: 1
+    t.integer "rating"
     t.string "title", null: false
     t.datetime "updated_at", null: false
     t.integer "user_id", null: false

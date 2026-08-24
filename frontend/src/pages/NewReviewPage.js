@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+import RatingSlider from "../components/reviews/RatingSlider";
 
 import "./ReviewsPage.css";
 
@@ -117,76 +118,36 @@ export default function NewReviewPage() {
         </div>
       )}
 
-      <form
-        className="review-editor"
-        onSubmit={handleSubmit}
-      >
-
+      <form className="review-editor" onSubmit={handleSubmit}>
         <label className="review-label">
           Review Title
-
           <input
             className="auth-input"
             value={title}
-            onChange={(e) =>
-              setTitle(e.target.value)
-            }
+            onChange={(e) => setTitle(e.target.value)}
             required
           />
         </label>
 
-        <label className="review-label">
-           Rating
-
-           <select
-             className="auth-input"
-             value={rating}
-             onChange={(e) =>
-               setRating(e.target.value)
-             }
-           >
-             <option value="">
-               No rating
-             </option>
-           
-             {Array.from(
-               { length: 11 },
-               (_, index) => {
-                 const value = 0 + index * 0.5;
-                 return (
-                   <option key={value} value={value}>
-                     {value}
-                   </option>
-                 );
-               }
-             )}
-           </select>
-          </label>
+        <div className="review-label">
+          <span>Rating</span>
+          <RatingSlider value={rating} onChange={setRating} />
+        </div>
 
         <label className="review-label">
           Review
-
           <textarea
             className="auth-input review-textarea"
             value={body}
-            onChange={(e) =>
-              setBody(e.target.value)
-            }
+            onChange={(e) => setBody(e.target.value)}
             rows={10}
             required
           />
         </label>
 
-        <button
-          className="auth-button"
-          type="submit"
-          disabled={saving}
-        >
-          {saving
-            ? "Publishing..."
-            : "Publish Review"}
+        <button className="auth-button" type="submit" disabled={saving}>
+          {saving ? "Publishing..." : "Publish Review"}
         </button>
-
       </form>
     </div>
   );

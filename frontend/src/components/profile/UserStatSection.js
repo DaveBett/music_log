@@ -22,9 +22,9 @@ export default function UserStatSection({ stats }) {
       </div>
 
       <div className="stat-card">
-        <h3>Favorite Artist</h3>
+        <h3>Most Logged Artist</h3>
         <span>
-          {stats?.favorite_artist || "-"}
+          {stats?.most_logged_artist || "-"}
         </span>
       </div>
 

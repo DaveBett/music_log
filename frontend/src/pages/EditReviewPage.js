@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+import RatingSlider from "../components/reviews/RatingSlider";
 
 import "./ReviewsPage.css";
 
@@ -143,33 +144,10 @@ export default function EditReviewPage() {
           />
         </label>
 
-        <label className="review-label">
-           Rating
-
-           <select
-             className="auth-input"
-             value={rating}
-             onChange={(e) =>
-               setRating(e.target.value)
-             }
-           >
-             <option value="">
-               No rating
-             </option>
-           
-             {Array.from(
-               { length: 11 },
-               (_, index) => {
-                 const value = 0 + index * 0.5;
-                 return (
-                   <option key={value} value={value}>
-                     {value}
-                   </option>
-                 );
-               }
-             )}
-           </select>
-          </label>
+        <div className="review-label">
+          <span>Rating</span>
+          <RatingSlider value={rating} onChange={setRating} />
+        </div>
 
         <label className="review-label">
           Review
