@@ -2,11 +2,9 @@
 one:
   email: user_one@example.com
   username: user_one
-  encrypted_password: <%= ::BCrypt::Password.create("password123") %>
   email_verified_at: <%= Time.current %>
 
 two:
   email: user_two@example.com
   username: user_two
-  encrypted_password: <%= ::BCrypt::Password.create("password123") %>
   email_verified_at: <%= Time.current %>
