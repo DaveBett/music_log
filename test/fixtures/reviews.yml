@@ -1,19 +1,14 @@
 # Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
-
 one:
   user: one
+  entry: one
   title: MyString
-  artist: MyString
-  album: MyString
-  release_year: 1
-  rating: 1
+  rating: 50
   body: MyText
 
 two:
   user: two
+  entry: two
   title: MyString
-  artist: MyString
-  album: MyString
-  release_year: 1
-  rating: 1
+  rating: 50
   body: MyText

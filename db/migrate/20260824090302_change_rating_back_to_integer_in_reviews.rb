@@ -1,5 +1,7 @@
 class ChangeRatingBackToIntegerInReviews < ActiveRecord::Migration[8.0]
   def up
+    change_column :reviews, :rating, :decimal, precision: 5, scale: 1
+
     execute <<~SQL
       UPDATE reviews SET rating = ROUND(((rating - 1) / 4.0) * 100) WHERE rating IS NOT NULL
     SQL
