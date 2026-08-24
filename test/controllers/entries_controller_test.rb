@@ -1,48 +1,48 @@
 require "test_helper"
 
-class EntriesControllerTest < ActionDispatch::IntegrationTest
+class Api::EntriesControllerTest < ActionDispatch::IntegrationTest
   setup do
+    @user = users(:one)
     @entry = entries(:one)
+    @headers = auth_headers_for(@user)
   end
 
   test "should get index" do
-    get entries_url
+    get api_entries_url, headers: @headers
     assert_response :success
   end
 
-  test "should get new" do
-    get new_entry_url
+  test "should show entry" do
+    get api_entry_url(@entry), headers: @headers
     assert_response :success
   end
 
   test "should create entry" do
     assert_difference("Entry.count") do
-      post entries_url, params: { entry: { artist: @entry.artist, title: @entry.title, year: @entry.year } }
+      post api_entries_url,
+        params: {
+          entry: {
+            artist: "New Artist",
+            title: "New Title",
+            year: "2024",
+            musicbrainz_id: SecureRandom.uuid
+          }
+        },
+        headers: @headers
     end
-
-    assert_redirected_to entry_url(Entry.last)
-  end
-
-  test "should show entry" do
-    get entry_url(@entry)
-    assert_response :success
-  end
-
-  test "should get edit" do
-    get edit_entry_url(@entry)
-    assert_response :success
+    assert_response :created
   end
 
   test "should update entry" do
-    patch entry_url(@entry), params: { entry: { artist: @entry.artist, title: @entry.title, year: @entry.year } }
-    assert_redirected_to entry_url(@entry)
+    patch api_entry_url(@entry),
+      params: { entry: { title: "Updated Title" } },
+      headers: @headers
+    assert_response :success
   end
 
   test "should destroy entry" do
     assert_difference("Entry.count", -1) do
-      delete entry_url(@entry)
+      delete api_entry_url(@entry), headers: @headers
     end
-
-    assert_redirected_to entries_url
   end
 end
