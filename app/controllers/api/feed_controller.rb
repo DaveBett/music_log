@@ -29,7 +29,11 @@ class Api::FeedController < ApplicationController
       .includes(
         :user,
         :trackable,
-        trackable: [ :entry, :comments ]
+        trackable: [
+        :entry,
+        :comments,
+        { review: [ :user, :entry ] }
+        ]
       )
       .order(created_at: :desc)
       .limit(30)
@@ -45,7 +49,11 @@ class Api::FeedController < ApplicationController
       .includes(
         :user,
         :trackable,
-        trackable: [ :entry, :comments ]
+        trackable: [
+        :entry,
+        :comments,
+        { review: [ :user, :entry ] }
+        ]
       )
       .limit(30)
   end
@@ -56,7 +64,11 @@ class Api::FeedController < ApplicationController
       .includes(
         :user,
         :trackable,
-        trackable: [ :entry, :comments ]
+        trackable: [
+        :entry,
+        :comments,
+        { review: [ :user, :entry ] }
+        ]
       )
       .order(created_at: :desc)
       .limit(30)
@@ -67,7 +79,11 @@ class Api::FeedController < ApplicationController
       .includes(
         :user,
         :trackable,
-        trackable: [ :entry, :comments ]
+        trackable: [
+        :entry,
+        :comments,
+        { review: [ :user, :entry ] }
+        ]
       )
       .order(created_at: :desc)
       .limit(30)
@@ -127,6 +143,22 @@ class Api::FeedController < ApplicationController
       {
         user_id: followed_user&.id,
         username: followed_user&.username
+      }
+
+    when :comment
+      comment = activity.trackable
+      review = comment&.review
+      entry = review&.entry
+      review_author = review&.user
+
+      {
+        comment_id: comment&.id,
+        review_id: review&.id,
+        entry_id: entry&.id,
+        album: entry&.title,
+        artist: entry&.artist,
+        review_author_id: review_author&.id,
+        review_author_username: review_author&.username
       }
 
     else

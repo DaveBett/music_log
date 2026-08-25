@@ -81,28 +81,6 @@ form {
   min-height: 100px;
 }
 
-.small,
-.medium,
-.big,
-.bigger {
-  min-width: 0;
-  width: auto;
-  max-width: none;
-}
-
-.small {
-  text-align: center;
-}
-
-.medium {
-  text-align: center;
-}
-
-.big {
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
 .entry-actions {
   display: flex;
   justify-content: space-around;
@@ -530,6 +508,19 @@ form {
   }
 }
 
+.delete-entry {
+  background-color: #2a2a2a;
+  padding: 2rem;
+  border-radius: 12px;
+  display: flex;
+  justify-content: space-around;
+}
+
+.delete-actions {
+  display: flex;
+  gap: 2rem;
+}
+
 @media (max-width: 400px) {
 
   .app-content {
@@ -544,7 +535,7 @@ form {
     font-size: 26px;
   }
 
-  .entry-container {
+  .entry-container, .delete-entry {
     display: flex;
     justify-content: space-between;
     padding: 12px;
@@ -561,7 +552,7 @@ form {
     font-size: 0.95rem;
   }
 
-  .entry-actions {
+  .entry-actions, .delete-actions {
     width: 30px;
     gap: 10px;
   }
@@ -572,6 +563,27 @@ form {
   }
 
   .entry-number, .entry-date {
+    display: none;
+  }
+
+  .entry-artist, .entry-album {
+    text-align: left;
+    width: 30%;
+  }
+
+  .delete-entry {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px;
+    gap: 3px 8px;
+  }
+
+  .confirm-delete, .cancel-delete {
+    padding: 7px;
+  }
+
+  .delete-message {
     display: none;
   }
 }

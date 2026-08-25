@@ -21,19 +21,28 @@ class Api::CommentsController < ApplicationController
     comment = @review.comments.new(comment_params)
     comment.user = current_user
 
-    if comment.save
-      render json: comment.as_json(
-        include: {
-          user: {
-            only: %i[id username]
-          }
-        }
-      ), status: :created
-    else
-      render json: {
-        errors: comment.errors.full_messages
-      }, status: :unprocessable_entity
+    Comment.transaction do
+      comment.save!
+
+      Activity.create!(
+        user: current_user,
+        activity_type: :comment,
+        trackable: comment
+      )
     end
+
+    render json: comment.as_json(
+      include: {
+        user: {
+          only: %i[id username]
+        }
+      }
+    ), status: :created
+
+  rescue ActiveRecord::RecordInvalid => e
+    render json: {
+      errors: e.record.errors.full_messages
+    }, status: :unprocessable_entity
   end
 
   def destroy

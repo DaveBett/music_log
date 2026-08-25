@@ -59,10 +59,24 @@ export default function ActivityCard({ activity }) {
             </Link>
           </p>
         )}
-        <span>
-          {formatActivityDate(created_at)}
-        </span>
+
+        {type === "comment" && (
+        <p>
+          commented on{" "}
+          <Link to={getProfilePath(data.review_author_username)} className="activity-user">
+            <strong>{data.review_author_username}</strong>
+          </Link>
+          {"'s review of "}
+          <Link to={`/reviews/${data.review_id}`} className="activity-review-link">
+            <strong>{data.album}</strong>
+          </Link>
+        </p>
+        )}
       </div>
+
+      <span>
+        {formatActivityDate(created_at)}
+      </span>
     </article>
   );
 }

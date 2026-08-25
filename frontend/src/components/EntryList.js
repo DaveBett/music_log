@@ -32,12 +32,12 @@ const EntryList = ({
             Click on any album name to leave a review.
         </div>
       )}
-      <div className="entry-legend">
-        <h3 className="small">#</h3>
-        <h3 className="medium">Listened</h3>
-        <h3 className="big">Artist</h3>
-        <h3 className="big">Album</h3>
-        <h3 className="medium">Year</h3>
+      <div className="entry-container">
+        <h3 className="entry-number">#</h3>
+        <h3 className="entry-date">Listened</h3>
+        <h3 className="entry-artist">Artist</h3>
+        <h3 className="entry-album">Album</h3>
+        <h3 className="entry-year">Year</h3>
         <div className="medium"></div>
       </div>
 

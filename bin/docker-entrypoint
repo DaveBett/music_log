@@ -16,6 +16,10 @@ if [ "${@: -2:1}" == "./bin/rails" ] && [ "${@: -1:1}" == "server" ]; then
   ./bin/rails runner "exit(ActiveRecord::Base.connection.table_exists?('solid_cable_messages') ? 0 : 1)" \
     || DISABLE_DATABASE_ENVIRONMENT_CHECK=1 ./bin/rails db:schema:load:cable
 
+
+  echo "==> Cleanup orphaned follow activities..."
+  ./bin/rails activities:cleanup_orphan_follows
+
   echo "==> Setup database completato"
 fi
 

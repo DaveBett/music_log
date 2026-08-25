@@ -38,31 +38,25 @@ const Entry = ({
   if (confirmDelete) {
     return (
       <div className="entry delete-confirm">
-        <div className="entry-container">
-          <div className="bigger">
+        <div className="delete-entry">
+          <div className="delete-name">
             <strong>{artist}</strong><br/>
             {title}
           </div>
 
-          <div className="big delete-message">
+          <div className="delete-message">
             Delete this album?
           </div>
-
-          <button 
-            className="confirm-delete"
-            onClick={handleConfirmDelete}
-            >Delete
-          </button>
-          <button
-            className="cancel-delete"
-            onClick={() => setConfirmDeleteId(null)}
-          >
-            Cancel
-          </button>
-          </div>
+            <button  className="confirm-delete" onClick={handleConfirmDelete}>
+              Delete
+            </button>
+            <button className="cancel-delete" onClick={() => setConfirmDeleteId(null)}>
+              Cancel
+            </button>
         </div>
-      );
-    }
+      </div>
+    );
+  }
 
   return (
     <div className={classes}>

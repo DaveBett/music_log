@@ -239,6 +239,7 @@ class Api::UsersController < ApplicationController
       )
       .limit(1)
       .pick(:name)
+      &.then { |name| name.split(" ").map(&:capitalize).join(" ") }
   end
 
   def avatar_url(user)
