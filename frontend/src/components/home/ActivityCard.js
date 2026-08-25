@@ -54,8 +54,8 @@ export default function ActivityCard({ activity }) {
         {type === "follow" && (
           <p>
             followed{" "}
-            <Link to={getProfilePath(user.username)} className="activity-user">
-              <strong>{user.username}</strong>
+            <Link to={getProfilePath(data.username)} className="activity-user">
+              <strong>{data.username}</strong>
             </Link>
           </p>
         )}
