@@ -11,7 +11,7 @@ export default function HeroSection() {
           <span> {user?.username}</span>
         </h1>
         <p>
-          Discover what the MusicLog community is listening to today.
+          Discover what the Musicloggr community is listening to today.
         </p>
       </div>
       <Link

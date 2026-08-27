@@ -26,22 +26,24 @@ class Api::FeedController < ApplicationController
 
     Activity
       .where(user_id: followed_user_ids)
+      .where.not(activity_type: :follow)
       .includes(
         :user,
         :trackable,
         trackable: [
-        :entry,
-        :comments,
-        { review: [ :user, :entry ] }
+          :entry,
+          :comments,
+          { review: [ :user, :entry ] }
         ]
       )
       .order(created_at: :desc)
-      .limit(30)
+      .limit(20)
   end
 
   def popular_activities
     Activity
       .where(activity_type: :review)
+      .where.not(user_id: current_user.id)
       .joins("LEFT JOIN comments ON comments.review_id = activities.trackable_id")
       .where(trackable_type: "Review")
       .group("activities.id")
@@ -50,43 +52,47 @@ class Api::FeedController < ApplicationController
         :user,
         :trackable,
         trackable: [
-        :entry,
-        :comments,
-        { review: [ :user, :entry ] }
+          :entry,
+          :comments,
+          { review: [ :user, :entry ] }
         ]
       )
-      .limit(30)
+      .limit(20)
   end
 
   def recent_activities
     Activity
       .where(created_at: 3.days.ago..Time.current)
+      .where.not(user_id: current_user.id)
+      .where.not(activity_type: :follow)
       .includes(
         :user,
         :trackable,
         trackable: [
-        :entry,
-        :comments,
-        { review: [ :user, :entry ] }
+          :entry,
+          :comments,
+          { review: [ :user, :entry ] }
         ]
       )
       .order(created_at: :desc)
-      .limit(30)
+      .limit(20)
   end
 
   def global_activities
     Activity
+      .where.not(user_id: current_user.id)
+      .where.not(activity_type: :follow)
       .includes(
         :user,
         :trackable,
         trackable: [
-        :entry,
-        :comments,
-        { review: [ :user, :entry ] }
+          :entry,
+          :comments,
+          { review: [ :user, :entry ] }
         ]
       )
       .order(created_at: :desc)
-      .limit(30)
+      .limit(20)
   end
 
   def activity_json(activity)
@@ -133,16 +139,6 @@ class Api::FeedController < ApplicationController
         album: entry&.title,
         artist: entry&.artist,
         comment_count: review&.comments&.count || 0
-      }
-
-    when :follow
-      follow = activity.trackable
-
-      followed_user = User.find_by(id: follow.followed_id)
-
-      {
-        user_id: followed_user&.id,
-        username: followed_user&.username
       }
 
     when :comment

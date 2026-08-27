@@ -4,6 +4,7 @@ import { FaChevronDown } from "react-icons/fa";
 import { useAuth } from "../../context/AuthContext";
 import Avatar from "../Avatar";
 import SearchBar from "./SearchBar";
+import NotificationBell from "../NotificationBell";
 import "./Navbar.css";
 
 export default function Navbar() {
@@ -43,6 +44,7 @@ export default function Navbar() {
 
       <SearchBar />
       <div className="navbar-user" ref={dropdownRef}>
+        <NotificationBell />
         <button className="profile-button" onClick={() => setOpen(!open)}>
           <div className="navbar-avatar">
             <Avatar src={user.avatar_url} username={user.username} size={34}/>

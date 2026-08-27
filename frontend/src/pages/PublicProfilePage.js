@@ -1,11 +1,7 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 
-import {
-  getPublicProfile,
-  followUser,
-  unfollowUser
-} from "../api/endpoints";
+import { getPublicProfile, followUser, unfollowUser } from "../api/endpoints";
 
 import PublicProfileHeader from "../components/publicProfile/PublicProfileHeader";
 import PublicProfileTabs from "../components/publicProfile/PublicProfileTabs";

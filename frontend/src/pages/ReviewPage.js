@@ -122,11 +122,8 @@ export default function ReviewPage() {
         </div>
 
       </div>
-
       <article className="full-review">
-
         <div className="review-header">
-
           <div>
             <h2>{review.title}</h2>
 
@@ -136,11 +133,9 @@ export default function ReviewPage() {
               ).toLocaleDateString()}
             </span>
           </div>
-
           <div className="review-rating">
             {review.rating ?? "-"}
           </div>
-
         </div>
 
         <p className="review-body">
@@ -161,22 +156,14 @@ export default function ReviewPage() {
               Edit
             </button>
 
-            <button
-              className="delete-button"
-              onClick={handleDelete}
-            >
+            <button className="delete-button" onClick={handleDelete}>
               Delete
             </button>
 
           </div>
         )}
-
       </article>
-
-      <CommentList
-        reviewId={review.id}
-      />
-
+      <CommentList reviewId={review.id} />
     </div>
   );
 }

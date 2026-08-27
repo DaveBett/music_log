@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_08_24_090302) do
+ActiveRecord::Schema[8.1].define(version: 2026_08_27_091923) do
   create_table "active_storage_attachments", force: :cascade do |t|
     t.bigint "blob_id", null: false
     t.datetime "created_at", null: false
@@ -109,6 +109,21 @@ ActiveRecord::Schema[8.1].define(version: 2026_08_24_090302) do
     t.index ["jti"], name: "index_jwt_denylists_on_jti"
   end
 
+  create_table "notifications", force: :cascade do |t|
+    t.integer "actor_id", null: false
+    t.datetime "created_at", null: false
+    t.integer "notification_type", null: false
+    t.datetime "read_at"
+    t.integer "trackable_id", null: false
+    t.string "trackable_type", null: false
+    t.datetime "updated_at", null: false
+    t.integer "user_id", null: false
+    t.index ["actor_id"], name: "index_notifications_on_actor_id"
+    t.index ["trackable_type", "trackable_id"], name: "index_notifications_on_trackable"
+    t.index ["user_id", "read_at"], name: "index_notifications_on_user_id_and_read_at"
+    t.index ["user_id"], name: "index_notifications_on_user_id"
+  end
+
   create_table "reviews", force: :cascade do |t|
     t.text "body", null: false
     t.datetime "created_at", null: false
@@ -151,6 +166,8 @@ ActiveRecord::Schema[8.1].define(version: 2026_08_24_090302) do
   add_foreign_key "entry_genres", "genres"
   add_foreign_key "follows", "users", column: "followed_id"
   add_foreign_key "follows", "users", column: "follower_id"
+  add_foreign_key "notifications", "users"
+  add_foreign_key "notifications", "users", column: "actor_id"
   add_foreign_key "reviews", "entries"
   add_foreign_key "reviews", "users"
 end

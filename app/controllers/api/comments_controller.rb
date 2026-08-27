@@ -29,6 +29,8 @@ class Api::CommentsController < ApplicationController
         activity_type: :comment,
         trackable: comment
       )
+
+      notify_comment_participants(comment)
     end
 
     render json: comment.as_json(
@@ -69,5 +71,33 @@ class Api::CommentsController < ApplicationController
 
   def comment_params
     params.require(:comment).permit(:body)
+  end
+
+  def notify_comment_participants(comment)
+    review = comment.review
+
+    if review.user_id != current_user.id
+      Notification.create!(
+        user: review.user,
+        actor: current_user,
+        notification_type: :comment_on_review,
+        trackable: comment
+      )
+    end
+
+    previous_commenter_ids =
+      review.comments
+        .where.not(user_id: [ current_user.id, review.user_id ])
+        .distinct
+        .pluck(:user_id)
+
+    User.where(id: previous_commenter_ids).find_each do |participant|
+      Notification.create!(
+        user: participant,
+        actor: current_user,
+        notification_type: :comment_on_commented_review,
+        trackable: comment
+      )
+    end
   end
 end

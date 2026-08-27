@@ -87,12 +87,16 @@ class Api::ReviewsController < ApplicationController
 
     Review.transaction do
       review.save!
+      Activity.create!(user: current_user, activity_type: :review, trackable: review)
 
-      Activity.create!(
-        user: current_user,
-        activity_type: :review,
-        trackable: review
-      )
+      current_user.followers.where(id: Entry.where(musicbrainz_id: entry.musicbrainz_id).select(:user_id)).find_each do |follower|
+        Notification.create!(
+          user: follower,
+          actor: current_user,
+          notification_type: :review_on_logged_entry,
+          trackable: review
+        )
+      end
     end
 
     render json: review.as_json(

@@ -9,7 +9,6 @@ import ProfilePage from "./pages/ProfilePage";
 import PublicProfilePage from "./pages/PublicProfilePage"
 import SettingsPage from "./pages/SettingsPage";
 import ReviewsPage from "./pages/ReviewPage";
-import Footer from './components/Footer';
 import NewReviewPage from "./pages/NewReviewPage"
 import EditReviewPage from "./pages/EditReviewPage"
 import ErrorPage from './pages/ErrorPage';
@@ -32,7 +31,6 @@ const App = () => {
             <ProtectedRoute>
               <Navbar />
               <HomePage />
-              <Footer />
             </ProtectedRoute>
           }
         />

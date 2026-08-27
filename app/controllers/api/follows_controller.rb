@@ -8,20 +8,17 @@ class Api::FollowsController < ApplicationController
       followed: user
     )
 
-    if follow.save
-      Activity.create!(
-        user: current_user,
-        activity_type: :follow,
+    Follow.transaction do
+      follow.save!
+
+      Activity.create!(user: current_user, activity_type: :follow, trackable: follow)
+
+      Notification.create!(
+        user: user,
+        actor: current_user,
+        notification_type: :follow,
         trackable: follow
       )
-
-      render json: {
-        following: true
-      }, status: :created
-    else
-      render json: {
-        errors: follow.errors.full_messages
-      }, status: :unprocessable_entity
     end
   end
 

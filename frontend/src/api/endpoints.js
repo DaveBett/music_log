@@ -405,3 +405,13 @@ export const resetPassword = async (
 
   return response.data;
 };
+
+export const getNotifications = async () => {
+  const response = await api.get("/notifications");
+  return response.data;
+};
+
+export const markNotificationsRead = async () => {
+  const response = await api.patch("/notifications/mark_read");
+  return response.data;
+};
