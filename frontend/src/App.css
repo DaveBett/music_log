@@ -262,7 +262,8 @@ form {
 }
 
 .footer {
-  padding: 20px;
+  text-align: center;
+  padding-bottom: 20px;
   font-weight: 800;
 }
 

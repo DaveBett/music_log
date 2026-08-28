@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 import {
   getReview,
@@ -95,7 +96,6 @@ export default function ReviewPage() {
 
   return (
     <div className="review-page">
-
       <div className="review-album-header">
         {coverUrl && (
           <img
@@ -115,9 +115,11 @@ export default function ReviewPage() {
 
           <p>
             Reviewed by{" "}
-            <strong>
-              {review.user?.username}
-            </strong>
+            <Link to={`/user/${review.user?.username}`}>
+              <strong>
+                {review.user?.username}
+              </strong>
+            </Link>
           </p>
         </div>
 
