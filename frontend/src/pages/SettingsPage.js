@@ -128,14 +128,8 @@ export default function SettingsPage() {
 
   return (
     <div className="settings-page">
-
       <h1>Settings</h1>
-
-      <AvatarSettingsCard
-        user={user}
-        onSave={handleAvatarUpdate}
-        saving={savingAvatar}
-      />
+      <AvatarSettingsCard user={user} onSave={handleAvatarUpdate} saving={savingAvatar} />
 
       {avatarSuccess && (
         <div className="success-banner">

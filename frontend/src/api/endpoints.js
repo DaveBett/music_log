@@ -415,3 +415,13 @@ export const markNotificationsRead = async () => {
   const response = await api.patch("/notifications/mark_read");
   return response.data;
 };
+
+export const getFollowers = async (username) => {
+  const response = await api.get(`/users/${username}/followers`);
+  return response.data;
+};
+
+export const getFollowing = async (username) => {
+  const response = await api.get(`/users/${username}/following`);
+  return response.data;
+};  

@@ -1,10 +1,16 @@
+import { useState } from "react";
 import Avatar from "../Avatar";
+import FollowListModal from "../publicProfile/FollowListModal";
+import { getFollowers, getFollowing } from "../../api/endpoints";
 
 export default function ProfileHeader({
   user,
   stats,
   isOwnProfile,
 }) {
+  const [modalType, setModalType] = useState(null);
+  const [modalUsers, setModalUsers] = useState([]);
+
   const joined = user?.created_at
     ? new Date(user.created_at).toLocaleDateString("en-GB", {
         month: "long",
@@ -12,10 +18,24 @@ export default function ProfileHeader({
       })
     : null;
 
+  async function openModal(type) {
+    try {
+      const data =
+        type === "followers"
+          ? await getFollowers(user.username)
+          : await getFollowing(user.username);
+
+      setModalUsers(data);
+      setModalType(type);
+    } catch (err) {
+      console.error("Unable to load list:", err);
+    }
+  }
+
   return (
     <div className="profile-header">
       <div className="profile-avatar">
-      <Avatar src={user.avatar_url} username={user.username} size={120}/>
+        <Avatar src={user.avatar_url} username={user.username} size={120} />
       </div>
 
       <div className="profile-info">
@@ -45,18 +65,32 @@ export default function ProfileHeader({
             <span>Reviews</span>
           </div>
 
-          <div className="profile-stat">
+          <button
+            className="profile-stat profile-stat-clickable"
+            onClick={() => openModal("followers")}
+          >
             <strong>{stats?.followers ?? 0}</strong>
             <span>Followers</span>
-          </div>
+          </button>
 
-          <div className="profile-stat">
+          <button
+            className="profile-stat profile-stat-clickable"
+            onClick={() => openModal("following")}
+          >
             <strong>{stats?.following ?? 0}</strong>
             <span>Following</span>
-          </div>
+          </button>
 
         </div>
       </div>
+
+      {modalType && (
+        <FollowListModal
+          title={modalType === "followers" ? "Followers" : "Following"}
+          users={modalUsers}
+          onClose={() => setModalType(null)}
+        />
+      )}
     </div>
   );
 }

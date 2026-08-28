@@ -18,6 +18,9 @@ Rails.application.routes.draw do
 
     get "users/:username",         to: "users#show"
     get "users/:username/reviews", to: "reviews#user_reviews"
+    get "users/:username/followers", to: "users#followers"
+    get "users/:username/following", to: "users#following_list"
+
     get "profile",                 to: "users#profile"
 
     get "feed",   to: "feed#index"

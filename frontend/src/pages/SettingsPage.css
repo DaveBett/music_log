@@ -15,3 +15,21 @@
   display: flex;
   gap: 1rem;
 }
+
+@media (max-width: 800px) {
+  .settings-page {
+    padding: 1rem;
+  }
+
+  .avatar-settings {
+    padding: 0;
+  }
+
+  .avatar-settings-controls {
+    width: 50%;
+  }
+
+  .input-avatar {
+    max-width: 100%;
+  }
+}

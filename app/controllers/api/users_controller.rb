@@ -193,6 +193,18 @@ class Api::UsersController < ApplicationController
     }
   end
 
+  def followers
+    user = User.find_by!(username: params[:username])
+
+    render json: user.followers.map { |follower| user_summary(follower) }
+  end
+
+  def following_list
+    user = User.find_by!(username: params[:username])
+
+    render json: user.following.map { |followed| user_summary(followed) }
+  end
+
   private
 
   def user_json(user)
@@ -256,5 +268,13 @@ class Api::UsersController < ApplicationController
       .count
       .keys
       .first
+  end
+
+  def user_summary(user)
+    {
+      id: user.id,
+      username: user.username,
+      avatar_url: avatar_url(user)
+    }
   end
 end

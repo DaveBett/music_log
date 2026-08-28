@@ -58,6 +58,7 @@ export default function AvatarSettingsCard({
 
           <input
             id="avatar"
+            className="input-avatar"
             type="file"
             accept="image/jpeg,image/png,image/webp"
             onChange={handleFileChange}
@@ -72,7 +73,7 @@ export default function AvatarSettingsCard({
             {saving ? "Saving..." : "Save avatar"}
           </button>
 
-          <p>
+          <p className="img-type">
             JPEG, PNG or WebP. Maximum size: 5 MB.
           </p>
         </div>

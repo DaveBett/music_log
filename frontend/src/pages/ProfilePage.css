@@ -150,21 +150,96 @@
 }
 
 .follow-button {
-  padding: 10px 18px;
-  background-color: #4caf50;
+  padding: 0.7rem 1.8rem;
   border: none;
-  border-radius: 10px;
-  color: white;
-  font-weight: 600;
+  border-radius: 12px;
+  font-weight: 700;
+  font-size: 0.95rem;
   cursor: pointer;
-  transition: 0.2s;
+  transition: background-color 0.25s ease, transform 0.15s ease, color 0.25s ease;
+}
+
+.follow-button.not-following {
+  background-color: #4caf50;
+  color: #fff;
+}
+
+.follow-button.following {
+  background-color: #1d1d1d;
+  color: #fff;
+  border: 1px solid #fff;
 }
 
 .follow-button:hover {
-  opacity: 0.9;
+  filter: brightness(1.1);
 }
 
-@media (max-width: 768px) {
+.follow-button.pulse {
+  animation: follow-pulse 0.4s ease;
+}
+
+.profile-stat {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font: inherit;
+  color: inherit;
+}
+
+.profile-stat-clickable {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font: inherit;
+  color: inherit;
+}
+
+.profile-stat-clickable:hover strong,
+.profile-stat-clickable:hover span {
+  opacity: 0.8;
+}
+
+.stat-link {
+  background: none;
+  border: none;
+  color: #bdbdbd;
+  font-size: 0.95rem;
+  cursor: pointer;
+  padding: 0;
+}
+
+.stat-link:hover {
+  color: #fff;
+}
+
+@keyframes follow-pulse {
+  0% {
+    transform: scale(1);
+  }
+  40% {
+    transform: scale(1.12);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+.profile-follow-stats {
+  display: flex;
+  gap: 1.5rem;
+  margin: 0.5rem 0 1rem;
+  font-size: 0.95rem;
+  color: #bdbdbd;
+}
+
+.profile-follow-stats strong {
+  color: #fff;
+}
+
+@media (max-width: 800px) {
   .profile-header {
     flex-direction: column;
     text-align: center;
