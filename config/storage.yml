@@ -14,3 +14,6 @@ cloudflare:
   bucket: <%= ENV.fetch("R2_BUCKET", nil) %>
   endpoint: <%= ENV.fetch("R2_ENDPOINT", nil) %>
   force_path_style: true
+  http_continue_timeout: 0
+  request_checksum_calculation: when_required
+  response_checksum_validation: when_required
