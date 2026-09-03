@@ -10,7 +10,7 @@
 
 ---
 
-<img width="1574" height="846" alt="Screenshot 2026-09-03 101649" src="https://github.com/user-attachments/assets/eed7f7d9-3e6b-444d-8087-329892230502" />
+<img width="1572" height="852" alt="Musicloggr" src="https://github.com/user-attachments/assets/8e8382d7-34f9-4f30-aaca-6a8c5f276c20" />
 
 ---
 
