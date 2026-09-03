@@ -72,3 +72,5 @@ end
 gem "devise", "~> 5.0"
 
 gem "resend"
+gem "aws-sdk-s3", require: false
+gem "aws-sdk-s3", require: false
