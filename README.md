@@ -66,7 +66,7 @@ Ensure you have the following installed locally:
 
 ### 1. Clone the repository
 ```bash
-git clone [https://github.com/DaveBett/music_log.git](https://github.com/DaveBett/music_log.git)
+git clone https://github.com/DaveBett/music_log.git
 cd music_log
 ```
 ### 2. Backend Setup (Rails API in Root)
@@ -96,3 +96,11 @@ npm install
 # Start the development server
 npm start
 ```
+
+---
+
+## Upcoming Improvements
+
+* **Automated Testing:** Implementing backend model and request specs with RSpec and frontend component testing using React Testing Library.
+* **Continuous Integration:** Setting up GitHub Actions workflows for automated linting and test runs on pull requests.
+* **Caching Layer:** Adding Redis to cache frequent MusicBrainz release group queries and reduce outbound API load.
