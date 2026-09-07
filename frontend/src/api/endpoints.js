@@ -313,13 +313,11 @@ export const get_entry = async (id) => {
   return response.data;
 };
 
-export const searchMusicBrainz = async (query) => {
+export const searchMusicBrainz = async (query, mode = "artist") => {
   const response = await api.get(
     "/musicbrainz/search",
     {
-      params: {
-        q: query
-      }
+      params: { q: query, mode }
     }
   );
 

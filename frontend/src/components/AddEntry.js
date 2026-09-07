@@ -1,5 +1,7 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { searchMusicBrainz } from "../api/endpoints";
+
+import AlbumSearchModal from "./AlbumSearchModal";
 
 const AddEntry = ({
   addEntry,
@@ -8,26 +10,20 @@ const AddEntry = ({
   setEditingEntry
 }) => {
   const [query, setQuery] = useState("");
-  const [results, setResults] = useState([]);
+  const [mode, setMode] = useState("artist");
   const [selectedAlbum, setSelectedAlbum] = useState(null);
   const [searching, setSearching] = useState(false);
   const [successMessage, setSuccessMessage] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
-
-  const isEditingRef = useRef(false);
+  const [modalOpen, setModalOpen] = useState(false);
+  const [modalResults, setModalResults] = useState([]);
 
   useEffect(() => {
     if (!editingEntry) {
-      isEditingRef.current = false;
-
       setQuery("");
-      setResults([]);
       setSelectedAlbum(null);
-
       return;
     }
-
-    isEditingRef.current = true;
 
     setQuery(
       `${editingEntry.artist} - ${editingEntry.title}`
@@ -41,104 +37,73 @@ const AddEntry = ({
       musicbrainzUrl: editingEntry.musicbrainz_url
     });
 
-    setResults([]);
     setSuccessMessage("");
     setErrorMessage("");
   }, [editingEntry]);
 
-  useEffect(() => {
-    if (!query.trim()) {
-      setResults([]);
+  async function handleSearch() {
+    if (!query.trim()) return;
+
+    try {
+      setSuccessMessage("");
+      setErrorMessage("");
+      setSearching(true);
+
+      const albums = await searchMusicBrainz(query, mode);
+
+      setModalResults(albums);
+      setModalOpen(true);
+    } catch (error) {
+      console.error("MusicBrainz search failed:", error);
+      setErrorMessage("Unable to search for albums. Please try again.");
+    } finally {
       setSearching(false);
-      return;
     }
-
-    if (selectedAlbum) {
-      return;
-    }
-
-    const timeout = setTimeout(async () => {
-      try {
-        setSuccessMessage("");
-        setErrorMessage("");
-        setSearching(true);
-
-        const albums = await searchMusicBrainz(query);
-
-        setResults(albums);
-      } catch (error) {
-        console.error(
-          "MusicBrainz search failed:",
-          error
-        );
-        setErrorMessage(
-          "Unable to search for albums. Please try again."
-        );
-
-        setResults([]);
-      } finally {
-        setSearching(false);
-      }
-    }, 500);
-
-    return () => clearTimeout(timeout);
-  }, [query, selectedAlbum]);
+  }
 
   const handleSelectAlbum = (album) => {
     setSelectedAlbum(album);
+    setQuery(`${album.artist} - ${album.title}`);
+    setModalOpen(false);
+  };
 
-    setQuery(
-      `${album.artist} - ${album.title}`
+  const handleAddAlbum = async (album) => {
+    await addEntry(
+      album.artist,
+      album.title,
+      album.year,
+      album.musicbrainzId,
+      album.musicbrainzUrl
     );
-
-    setSearching(false);
-
-    setResults([]);
-    setErrorMessage("");
   };
 
   const handleSubmit = async () => {
-    if (!selectedAlbum) return;
-  
+    if (!selectedAlbum || !editingEntry) return;
+
     setSuccessMessage("");
     setErrorMessage("");
-  
+
     try {
-      if (editingEntry) {
-        await updateEntry(
-          editingEntry.id,
-          selectedAlbum.artist,
-          selectedAlbum.title,
-          selectedAlbum.year,
-          selectedAlbum.musicbrainzId,
-          selectedAlbum.musicbrainzUrl
-        );
-  
-        setSuccessMessage("Album updated successfully.");
-      } else {
-        await addEntry(
-          selectedAlbum.artist,
-          selectedAlbum.title,
-          selectedAlbum.year,
-          selectedAlbum.musicbrainzId,
-          selectedAlbum.musicbrainzUrl
-        );
-  
-        setSuccessMessage("Album added successfully.");
-      }
-  
+      await updateEntry(
+        editingEntry.id,
+        selectedAlbum.artist,
+        selectedAlbum.title,
+        selectedAlbum.year,
+        selectedAlbum.musicbrainzId,
+        selectedAlbum.musicbrainzUrl
+      );
+
+      setSuccessMessage("Album updated successfully.");
       setQuery("");
-      setResults([]);
       setSelectedAlbum(null);
       setEditingEntry(null);
-  
     } catch (error) {
       console.error(error);
-  
+
       const errors = error.response?.data?.errors || [];
-  
+
       if (
-        errors.some(error =>
+        errors.some((error) =>
           error.toLowerCase().includes("already in your catalog")
         )
       ) {
@@ -151,7 +116,6 @@ const AddEntry = ({
 
   const cancelEdit = () => {
     setQuery("");
-    setResults([]);
     setSelectedAlbum(null);
     setEditingEntry(null);
     setSuccessMessage("");
@@ -161,85 +125,89 @@ const AddEntry = ({
   return (
     <div className="add-entry">
       <div className="add-entry-search">
+        <div className="mode-toggle">
+          <button
+            type="button"
+            className={`mode-toggle-option ${mode === "artist" ? "active" : ""}`}
+            onClick={() => setMode("artist")}
+          >
+            Artist
+          </button>
+          
+          <button
+            type="button"
+            className={`mode-toggle-option ${mode === "album" ? "active" : ""}`}
+            onClick={() => setMode("album")}
+          >
+            Album
+          </button>
+        </div>
         <input
+          id = "add-entry"
           className="auth-input"
           type="text"
           value={query}
-          placeholder="Search artist or album..."
-          onChange={(event) => {
-            setQuery(event.target.value);
-
-            // This is important:
-            // changing the query means the previously
-            // selected album is no longer selected.
-            setSelectedAlbum(null);
+          placeholder={
+            mode === "artist"
+              ? "Search by artist name..."
+              : "Search by album title..."
+          }
+          onChange={(event) => setQuery(event.target.value)}
+          onKeyDown={(event) => {
+            if (event.key === "Enter") {
+              event.preventDefault();
+              handleSearch();
+            }
           }}
         />
 
         <button
           className="add-button"
-          onClick={handleSubmit}
-          disabled={!selectedAlbum}
+          onClick={handleSearch}
+          disabled={searching || !query.trim()}
         >
-          {editingEntry ? "Update Album" : "Add Album"}
+          {searching ? "Searching..." : "Search"}
         </button>
-        
+
         {editingEntry && (
-          <button
-            className="cancel-button"
-            onClick={cancelEdit}
-          >
-            Cancel
-          </button>
+          <>
+            <button
+              className="add-button"
+              onClick={handleSubmit}
+              disabled={!selectedAlbum}
+            >
+              Update Album
+            </button>
+
+            <button className="cancel-button" onClick={cancelEdit}>
+              Cancel
+            </button>
+          </>
         )}
       </div>
 
-      {searching && (
-        <div className="musicbrainz-searching">
-          Searching...
-        </div>
-      )}
-
       <div className="entry-message">
         {successMessage && (
-          <div
-            className="entry-success"
-            role="status"
-            aria-live="polite"
-          >
+          <div className="entry-success" role="status" aria-live="polite">
             {successMessage}
           </div>
         )}
 
         {errorMessage && (
-          <div
-            className="entry-error"
-            role="alert"
-          >
+          <div className="entry-error" role="alert">
             {errorMessage}
           </div>
         )}
       </div>
 
-      {results.length > 0 && (
-        <div className="musicbrainz-results">
-          {results.map((album) => (
-            <button
-              key={album.musicbrainzId}
-              className="musicbrainz-result"
-              onClick={() => handleSelectAlbum(album)}
-            >
-              <strong>{album.title}</strong>
-
-              <span>
-                {album.artist}
-                {album.year
-                  ? ` · ${album.year}`
-                  : ""}
-              </span>
-            </button>
-          ))}
-        </div>
+      {modalOpen && (
+        <AlbumSearchModal
+          results={modalResults}
+          isEditing={!!editingEntry}
+          onSelect={handleSelectAlbum}
+          onAdd={handleAddAlbum}
+          onClose={() => setModalOpen(false)}
+        />
       )}
     </div>
   );

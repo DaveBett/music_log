@@ -15,24 +15,22 @@ class MusicBrainzService
   MUTEX = Mutex.new
   MIN_INTERVAL = 1.05
 
-    def self.search_albums(query)
-      query = query.to_s.strip
-      return [] if query.blank?
+  def self.search_albums(query, mode: "artist")
+    query = query.to_s.strip
+    return [] if query.blank?
 
-      cache_key = "musicbrainz:full_search:#{query.downcase}"
+    mode = mode.to_s.presence_in(%w[artist album]) || "artist"
 
-      Rails.cache.fetch(cache_key, expires_in: 24.hours) do
-        artists = search_artists(query)
-        primary_artist = find_primary_artist(artists, query)
+    cache_key = "musicbrainz:full_search:#{mode}:#{query.downcase}"
 
-        if primary_artist
-          Rails.logger.info("MusicBrainz matched artist: #{primary_artist["name"]} (#{primary_artist["id"]})")
-          search_release_groups_for_artist(primary_artist["id"])
-        else
-          search_general_albums(query)
-        end
+    Rails.cache.fetch(cache_key, expires_in: 24.hours) do
+      if mode == "artist"
+        search_by_artist(query)
+      else
+        search_by_album(query)
       end
     end
+  end
 
   def self.get_release_group(release_group_id)
     return nil if release_group_id.blank?
@@ -62,6 +60,22 @@ class MusicBrainzService
   end
 
   private
+
+  def self.search_by_artist(query)
+    artists = search_artists(query)
+    primary_artist = find_primary_artist(artists, query)
+
+    if primary_artist
+      Rails.logger.info("MusicBrainz matched artist: #{primary_artist["name"]} (#{primary_artist["id"]})")
+      search_release_groups_for_artist(primary_artist["id"])
+    else
+      []
+    end
+  end
+
+  def self.search_by_album(query)
+    search_general_albums(query)
+  end
 
   def self.search_artists(query)
     uri = URI(ARTIST_URL)
@@ -146,7 +160,7 @@ class MusicBrainzService
     uri.query = URI.encode_www_form(
       query: query,
       fmt: "json",
-      limit: 25
+      limit: 40
     )
 
     Rails.logger.info(

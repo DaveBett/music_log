@@ -3,6 +3,7 @@ class Api::MusicbrainzController < ApplicationController
 
   def search
     query = params[:q].to_s.strip
+    mode = params[:mode].to_s.presence || "artist"
 
     if query.blank?
       return render json: {
@@ -12,7 +13,8 @@ class Api::MusicbrainzController < ApplicationController
 
     albums =
       MusicBrainzService.search_albums(
-        query
+        query,
+        mode: mode
       )
 
     render json: {
