@@ -141,7 +141,17 @@ class Api::UsersController < ApplicationController
         logs: user.entries.count,
         reviews: user.reviews.count,
         followers: user.followers.count,
-        following: user.following.count
+        following: user.following.count,
+        most_logged_artist: most_logged_artist(user),
+        favorite_genre: favorite_genre(user),
+        this_year_logs: user.entries
+          .where(
+            created_at: Time.current.beginning_of_year..Time.current.end_of_year
+          ).count,
+        average_rating: user.reviews
+        .where.not(rating: nil)
+        .average(:rating)
+        &.round(2)
       },
       entries: user.entries.order(created_at: :desc),
       following: current_user.following?(user)
@@ -163,8 +173,8 @@ class Api::UsersController < ApplicationController
         reviews: current_user.reviews.count,
         followers: current_user.followers.count,
         following: current_user.following.count,
-        most_logged_artist: most_logged_artist,
-        favorite_genre: favorite_genre,
+        most_logged_artist: most_logged_artist(current_user),
+        favorite_genre: favorite_genre(current_user),
         this_year_logs: current_user.entries
           .where(
             created_at: Time.current.beginning_of_year..Time.current.end_of_year
@@ -240,10 +250,10 @@ class Api::UsersController < ApplicationController
     )
   end
 
-  def favorite_genre
+  def favorite_genre(user)
     Genre
       .joins(entry_genres: :entry)
-      .where(entries: { user_id: current_user.id })
+      .where(entries: { user_id: user.id })
       .group("genres.id", "genres.name")
       .order(
         Arel.sql("COUNT(entry_genres.id) DESC"),
@@ -260,8 +270,8 @@ class Api::UsersController < ApplicationController
     url_for(user.avatar)
   end
 
-  def most_logged_artist
-    current_user.entries
+  def most_logged_artist(user)
+    user.entries
       .group(:artist)
       .order(Arel.sql("COUNT(*) DESC"), "artist ASC")
       .limit(1)

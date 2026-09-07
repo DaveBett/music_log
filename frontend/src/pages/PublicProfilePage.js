@@ -87,9 +87,7 @@ export default function PublicProfilePage() {
       )}
 
       {activeTab === "stats" && (
-        <UserStatsSection
-          stats={profile.stats}
-        />
+        <UserStatsSection stats={profile.stats} />
       )}
       <TopButton />
     </div>
