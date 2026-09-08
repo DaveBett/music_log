@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { getProfile, deleteReview } from "../api/endpoints";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 
 import ProfileHeader from "../components/profile/ProfileHeader";
 import ProfileTabs from "../components/profile/ProfileTabs";
@@ -12,8 +12,13 @@ import "./ProfilePage.css";
 
 export default function ProfilePage() {
   const [profile, setProfile] = useState(null);
-  const [activeTab, setActiveTab] = useState("log");
+  const [searchParams, setSearchParams] = useSearchParams();
+  const activeTab = searchParams.get("tab") || "log";
   const navigate = useNavigate();
+
+  function setActiveTab(tab) {
+    setSearchParams({ tab });
+  }
 
   useEffect(() => {
     loadProfile();

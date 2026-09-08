@@ -6,7 +6,6 @@ import ActivityFeed from "../components/home/ActivityFeed";
 import TrendingSection from "../components/home/TrendingSection";
 import Sidebar from "../components/home/Sidebar";
 import AddEntry from "../components/AddEntry";
-import TopButton from "../components/TopButton"
 
 import { getFeed, create_entry, getTrending } from "../api/endpoints";
 
@@ -100,7 +99,6 @@ export default function HomePage() {
         <Sidebar artists={trending.artists}/>
       </div>
       <TrendingSection albums={trending.albums}/>
-      <TopButton />
     </div>
   );
 }

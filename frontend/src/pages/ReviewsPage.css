@@ -175,6 +175,120 @@
   padding: 0;
 }
 
+.rating-ring {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.rating-ring-value {
+  position: absolute;
+  font-weight: 800;
+  font-size: 0.95rem;
+}
+
+.review-body-truncated {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.review-card {
+  cursor: default;
+}
+
+.review-controls {
+  display: flex;
+  flex: 2 1;
+  justify-content: flex-end;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.review-controls .entry-search-input {
+  margin-top: 0;
+  max-width: 31%;
+}
+
+.go-to-review {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.5rem;
+}
+
+.go-to-review-button {
+  background: none;
+  border: 1px solid #4caf50;
+  color: #4caf50;
+  border-radius: 8px;
+  padding: 0.4rem 0.9rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.go-to-review-button:hover {
+  background-color: #4caf50;
+  color: #121212;
+}
+
+.go-back-button {
+  background: none;
+  border: none;
+  color: #bdbdbd;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  margin-bottom: 1rem;
+  padding: 0;
+}
+
+.go-back-button:hover {
+  color: #fff;
+}
+
+.review-sort-controls {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.review-sort-select {
+  margin-top: 0;
+  width: auto;
+  padding: 0.5rem 0.75rem;
+  font-size: 0.85rem;
+}
+
+.review-sort-direction {
+  background-color: #2a2a2a;
+  color: #fff;
+  border: 1px solid #3b3b3b;
+  border-radius: 8px;
+  padding: 0.5rem 0.9rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.review-sort-direction:hover {
+  background-color: #343434;
+}
+
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
 @media (max-width: 800px) {
   .new-review-page {
     padding: 1rem;

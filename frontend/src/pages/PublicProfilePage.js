@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useSearchParams } from "react-router-dom";
 
 import { getPublicProfile, followUser, unfollowUser } from "../api/endpoints";
 
@@ -10,16 +10,19 @@ import PublicLogSection from "../components/publicProfile/PublicLogSection";
 import UserReviewSection from "../components/profile/UserReviewSection";
 import UserStatsSection from "../components/profile/UserStatSection";
 
-import TopButton from "../components/TopButton";
-
 import "./ProfilePage.css";
 
 export default function PublicProfilePage() {
   const { username } = useParams();
 
   const [profile, setProfile] = useState(null);
-  const [activeTab, setActiveTab] = useState("log");
+  const [searchParams, setSearchParams] = useSearchParams();
+  const activeTab = searchParams.get("tab") || "log";
   const [following, setFollowing] = useState(false);
+
+  function setActiveTab(tab) {
+    setSearchParams({ tab });
+  }
 
   useEffect(() => {
     async function loadProfile() {
@@ -89,7 +92,6 @@ export default function PublicProfilePage() {
       {activeTab === "stats" && (
         <UserStatsSection stats={profile.stats} />
       )}
-      <TopButton />
     </div>
   );
 }

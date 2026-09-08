@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { Link } from "react-router-dom";
 
 import {
@@ -9,12 +9,14 @@ import {
 } from "../api/endpoints";
 
 import CommentList from "../components/reviews/CommentList";
+import RatingRing from "../components/reviews/RatingRing";
 
 import "./ReviewsPage.css";
 
 export default function ReviewPage() {
   const { reviewId } = useParams();
   const navigate = useNavigate();
+  const location = useLocation();
 
   const [review, setReview] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -64,6 +66,16 @@ export default function ReviewPage() {
     }
   }
 
+  function handleGoBack() {
+    const fallbackTo = review?.is_owner
+      ? "/profile?tab=reviews"
+      : `/user/${review?.user?.username}?tab=reviews`;
+  
+    const to = location.state?.from || fallbackTo;
+  
+    navigate(to);
+  }
+
   if (loading) {
     return <p>Loading review...</p>;
   }
@@ -96,6 +108,10 @@ export default function ReviewPage() {
 
   return (
     <div className="review-page">
+      <button className="go-back-button" onClick={handleGoBack}>
+        &lt; Go back
+      </button>
+
       <div className="review-album-header">
         {coverUrl && (
           <img
@@ -135,9 +151,7 @@ export default function ReviewPage() {
               ).toLocaleDateString()}
             </span>
           </div>
-          <div className="review-rating">
-            {review.rating ?? "-"}
-          </div>
+          <RatingRing rating={review.rating} size={72} strokeWidth={6} />
         </div>
 
         <p className="review-body">

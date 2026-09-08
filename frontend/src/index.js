@@ -4,6 +4,7 @@ import { BrowserRouter } from "react-router-dom";
 import { AuthProvider } from "./context/AuthContext";
 import App from "./App";
 import Footer from "./components/Footer";
+import TopButton from "./components/TopButton";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 
@@ -12,6 +13,7 @@ root.render(
     <BrowserRouter>
       <AuthProvider>
         <App />
+        <TopButton />
         <Footer />
       </AuthProvider>
     </BrowserRouter>

@@ -1,7 +1,6 @@
 import { useEffect, useState, useRef } from "react";
 import { useAuth } from "../context/AuthContext";
 import EditableEntryList from "./EditableEntryList";
-import TopButton from "./TopButton";
 
 import {
   get_entries,
@@ -113,7 +112,6 @@ export default function MusicLog() {
           setConfirmDeleteId={setConfirmDeleteId}
           newEntryId={newEntryId}
         />
-        <TopButton />
       </div>
     </div>
   );

@@ -10,16 +10,31 @@ export default function AlbumSearchModal({
 }) {
   const [filter, setFilter] = useState("");
   const [addedIds, setAddedIds] = useState(new Set());
-  const [addingId, setAddingId] = useState(null);
+  const [addingIds, setAddingIds] = useState(new Set());
   const [errorId, setErrorId] = useState(null);
 
   const filteredResults = useMemo(() => {
     const normalized = filter.trim().toLowerCase();
-    if (!normalized) return results;
-
-    return results.filter((album) => {
-      const haystack = `${album.artist} ${album.title}`.toLowerCase();
-      return haystack.includes(normalized);
+  
+    const base = normalized
+      ? results.filter((album) => {
+          const haystack = `${album.artist} ${album.title}`.toLowerCase();
+          return haystack.includes(normalized);
+        })
+      : results;
+  
+    return [...base].sort((a, b) => {
+      const yearA = parseInt(a.year, 10);
+      const yearB = parseInt(b.year, 10);
+  
+      const hasYearA = !isNaN(yearA);
+      const hasYearB = !isNaN(yearB);
+  
+      if (!hasYearA && !hasYearB) return 0;
+      if (!hasYearA) return 1;
+      if (!hasYearB) return -1;
+  
+      return yearB - yearA;
     });
   }, [filter, results]);
 
@@ -31,15 +46,20 @@ export default function AlbumSearchModal({
       return;
     }
 
+    setAddingIds((current) => new Set(current).add(album.musicbrainzId));
+
     try {
-      setAddingId(album.musicbrainzId);
       await onAdd(album);
       setAddedIds((current) => new Set(current).add(album.musicbrainzId));
     } catch (error) {
       console.error("Unable to add album:", error);
       setErrorId(album.musicbrainzId);
     } finally {
-      setAddingId(null);
+      setAddingIds((current) => {
+        const next = new Set(current);
+        next.delete(album.musicbrainzId);
+        return next;
+      });
     }
   }
 
@@ -68,7 +88,7 @@ export default function AlbumSearchModal({
             filteredResults.map((album) => {
               const coverUrl = getAlbumCoverUrl(album.musicbrainzId);
               const isAdded = addedIds.has(album.musicbrainzId);
-              const isAdding = addingId === album.musicbrainzId;
+              const isAdding = addingIds.has(album.musicbrainzId);
               const hasError = errorId === album.musicbrainzId;
 
               return (
@@ -102,7 +122,7 @@ export default function AlbumSearchModal({
                     {isEditing
                       ? "Select"
                       : isAdded
-                      ? "Added ✓"
+                      ? "Added"
                       : isAdding
                       ? "Adding..."
                       : "Add"}
