@@ -40,7 +40,7 @@ export default function SearchBar() {
     <div className="search-container">
       <input
         className="search-input"
-        placeholder="Search users..."
+        placeholder="Search users, artists, albums..."
         value={query}
         onChange={(e) => setQuery(e.target.value)}
       />

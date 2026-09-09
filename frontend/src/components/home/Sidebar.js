@@ -1,3 +1,5 @@
+import { Link } from "react-router-dom";
+
 export default function Sidebar({ artists }) {
   return (
     <aside className="home-sidebar">
@@ -10,7 +12,12 @@ export default function Sidebar({ artists }) {
           <ol>
             {artists.map((artist) => (
               <li key={artist.artist}>
-                <span>{artist.artist}</span>
+                <Link
+                  to={`/artist/${encodeURIComponent(artist.artist)}`}
+                  state={{ from: "/" }}
+                >
+                  {artist.artist}
+                </Link>
               </li>
             ))}
           </ol>

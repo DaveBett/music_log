@@ -10,10 +10,8 @@ class Api::FeedController < ApplicationController
         popular_activities
       when "recent"
         recent_activities
-      when "global"
-        global_activities
       else
-        global_activities
+        following_activities
       end
 
     render json: activities.map { |activity| activity_json(activity) }

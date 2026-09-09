@@ -5,7 +5,8 @@ export default function ReviewList({
   editable = false,
   onEdit,
   onDelete,
-  backTo
+  backTo,
+  showAuthor = false
 }) {
   if (reviews.length === 0) {
     return (
@@ -17,7 +18,6 @@ export default function ReviewList({
 
   return (
     <div className="review-list">
-
       {reviews.map((review) => (
         <ReviewCard
           key={review.id}
@@ -26,9 +26,9 @@ export default function ReviewList({
           onEdit={onEdit}
           onDelete={onDelete}
           backTo={backTo}
+          showAuthor={showAuthor}
         />
       ))}
-
     </div>
   );
 }

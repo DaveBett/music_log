@@ -42,6 +42,9 @@ Rails.application.routes.draw do
     get   "notifications",           to: "notifications#index"
     patch "notifications/mark_read", to: "notifications#mark_read"
 
+    get "artists/:name",          to: "artists#show", constraints: { name: /.+/ }
+    get "albums/:musicbrainz_id", to: "albums#show"
+
     resources :entries do
       resource :review, only: %i[show create]
     end

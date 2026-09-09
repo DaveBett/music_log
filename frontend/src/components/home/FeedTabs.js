@@ -21,14 +21,6 @@ export default function FeedTabs({ activeTab, onChange }) {
       >
         Recent
       </button>
-
-      <button
-        className={activeTab === "global" ? "active" : ""}
-        onClick={() => onChange("global")}
-      >
-        Global
-      </button>
-
     </div>
   );
 }

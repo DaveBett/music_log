@@ -154,6 +154,30 @@
   font-size: 16px;
 }
 
+.search-dropdown-section {
+  padding: 0.5rem 0;
+}
+
+.search-dropdown-section:not(:last-child) {
+  border-bottom: 1px solid #343434;
+}
+
+.search-dropdown-label {
+  display: block;
+  padding: 0.25rem 1rem;
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: #777;
+}
+
+.search-result small {
+  display: block;
+  color: #999;
+  font-size: 0.8rem;
+}
+
 @media (max-width: 800px) {
   .navbar {
     padding: 1rem;

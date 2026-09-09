@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import { getAlbumCoverUrl } from "../../api/endpoints";
 
 export default function TrendingAlbum({
@@ -10,7 +11,11 @@ export default function TrendingAlbum({
   const coverUrl = getAlbumCoverUrl(musicbrainzId);
 
   return (
-    <div className="trending-card">
+    <Link
+      to={`/album/${musicbrainzId}`}
+      state={{ from: "/" }}
+      className="trending-card trending-card-compact"
+    >
       <div className="album-cover">
         {coverUrl ? (
           <img
@@ -27,6 +32,6 @@ export default function TrendingAlbum({
       <small>
         {logs} {logs === 1 ? "log" : "logs"}
       </small>
-    </div>
+    </Link>
   );
 }

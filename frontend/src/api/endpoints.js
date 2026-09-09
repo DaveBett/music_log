@@ -423,3 +423,13 @@ export const getFollowing = async (username) => {
   const response = await api.get(`/users/${username}/following`);
   return response.data;
 };  
+
+export const getArtistReviews = async (artistName) => {
+  const response = await api.get(`/artists/${encodeURIComponent(artistName)}`);
+  return response.data;
+};
+
+export const getAlbumReviews = async (musicbrainzId) => {
+  const response = await api.get(`/albums/${musicbrainzId}`);
+  return response.data;
+};

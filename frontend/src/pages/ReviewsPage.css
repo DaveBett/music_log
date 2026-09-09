@@ -289,6 +289,26 @@
   gap: 0.75rem;
 }
 
+.review-card-author {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #fff;
+}
+
+.review-footer {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.review-footer-actions {
+  align-self: flex-end;
+}
+
 @media (max-width: 800px) {
   .new-review-page {
     padding: 1rem;

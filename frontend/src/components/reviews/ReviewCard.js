@@ -1,5 +1,6 @@
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { getAlbumCoverUrl } from "../../api/endpoints";
+import Avatar from "../Avatar";
 import RatingRing from "./RatingRing";
 
 export default function ReviewCard({
@@ -7,7 +8,8 @@ export default function ReviewCard({
   editable = false,
   onEdit,
   onDelete,
-  backTo
+  backTo,
+  showAuthor = false
 }) {
   const navigate = useNavigate();
   const entry = review.entry;
@@ -25,6 +27,13 @@ export default function ReviewCard({
   return (
     <article className="review-card">
       <div className="review-card-main">
+        {showAuthor && (
+          <Link to={`/user/${review.user?.username}`} className="review-card-author">
+            <Avatar src={review.user?.avatar_url} username={review.user?.username} size={28} />
+            <span>{review.user?.username}</span>
+          </Link>
+        )}
+
         <div className="review-header">
           {coverUrl && (
             <img className="review-cover-large" src={coverUrl} alt={`${entry?.title} album cover`}/>
@@ -55,33 +64,33 @@ export default function ReviewCard({
                 review.created_at
               ).toLocaleDateString()}
             </span>
-            
-            <div className="go-to-review">
+
+            <div className="review-footer-actions">
               <button
                 className="go-to-review-button"
                 onClick={handleGoToReview}
               >
                 Go to Review &gt;
               </button>
-            </div>
-
-            {editable && (
-              <div className="review-actions">
-                <button
-                  className="edit-button"
-                  onClick={() => onEdit(review)}
-                >
-                  Edit
-                </button>
-
-                <button
-                  className="delete-button"
-                  onClick={() => onDelete(review.id)}
-                >
-                  Delete
-                </button>
               </div>
-            )}
+
+              {editable && (
+                <div className="review-actions">
+                  <button
+                    className="edit-button"
+                    onClick={() => onEdit(review)}
+                  >
+                    Edit
+                  </button>
+
+                  <button
+                    className="delete-button"
+                    onClick={() => onDelete(review.id)}
+                  >
+                    Delete
+                  </button>
+                </div>
+              )}
           </div>
         </div>
       </div>

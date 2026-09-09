@@ -16,6 +16,8 @@ import VerifyEmailPage from './pages/VerifyEmailPage';
 import CheckEmailPage from './pages/CheckEmailPage';
 import ForgotPasswordPage from './pages/ForgotPasswordPage';
 import ResetPasswordPage from './pages/ResetPasswordPage';
+import ArtistPage from './pages/ArtistPage';
+import AlbumPage from './pages/AlbumPage';
 
 import ProtectedRoute from "./components/ProtectedRoute";
 import AppLayout from "./components/AppLayout";
@@ -97,6 +99,28 @@ const App = () => {
             </ProtectedRoute>
           }
         />
+        <Route
+          path="/artist/:artistName"
+          element={
+            <ProtectedRoute>
+              <AppLayout>
+                <ArtistPage />
+              </AppLayout>
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/album/:musicbrainzId"
+          element={
+            <ProtectedRoute>
+              <AppLayout>
+                <AlbumPage />
+              </AppLayout>
+            </ProtectedRoute>
+          }
+        />
+        
         <Route path="/verify-email" element={<VerifyEmailPage />} />
         <Route path="/check-email" element={<CheckEmailPage />} />
         <Route path="*" element={<ErrorPage statusCode={404} />} />
