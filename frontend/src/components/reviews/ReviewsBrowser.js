@@ -124,6 +124,7 @@ export default function ReviewsBrowser({
 
         <div className="review-controls">
           <input
+            id="review-filter"
             className="auth-input entry-search-input"
             type="text"
             placeholder="Filter reviews..."
@@ -132,6 +133,7 @@ export default function ReviewsBrowser({
           />
 
           <select
+            id="review-sort"
             className="auth-input review-sort-select"
             value={sortField}
             onChange={(e) => setSortField(e.target.value)}

@@ -60,6 +60,7 @@ export default function ReviewEditor({
         Rating
 
         <select
+          id="rating-slider"
           className="auth-input"
           value={rating}
           onChange={(event) =>
