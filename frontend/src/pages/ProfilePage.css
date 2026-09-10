@@ -252,7 +252,39 @@
   align-items: center;
 }
 
-@media (max-width: 800px) {
+.profile-avatar-editable {
+  position: relative;
+  cursor: pointer;
+  border-radius: 50%;
+}
+
+.profile-avatar-overlay {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.5);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.profile-avatar-editable:hover .profile-avatar-overlay {
+  opacity: 1;
+}
+
+.profile-avatar-uploading {
+  font-size: 1.2rem;
+  font-weight: 700;
+}
+
+.profile-avatar-input {
+  display: none;
+}
+
+@media (max-width: 1000px) {
   .profile-header {
     flex-direction: column;
     text-align: center;

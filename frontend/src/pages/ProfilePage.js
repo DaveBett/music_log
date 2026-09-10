@@ -56,7 +56,17 @@ export default function ProfilePage() {
 
   return (
     <div className="profile-page">
-      <ProfileHeader user={profile.user} stats={profile.stats} isOwnProfile />
+      <ProfileHeader
+        user={profile.user}
+        stats={profile.stats}
+        isOwnProfile
+        onAvatarUpdated={(avatarUrl) =>
+          setProfile((current) => ({
+            ...current,
+            user: { ...current.user, avatar_url: avatarUrl }
+          }))
+        }
+      />
       <ProfileTabs activeTab={activeTab} onChange={setActiveTab} />
       {activeTab === "log" && (
         <UserLogSection entries={profile.entries} />

@@ -1,15 +1,19 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import Avatar from "../Avatar";
 import FollowListModal from "../publicProfile/FollowListModal";
-import { getFollowers, getFollowing } from "../../api/endpoints";
+import { getFollowers, getFollowing, updateAvatar } from "../../api/endpoints";
+import { MdOutlineModeEdit } from "react-icons/md";
 
 export default function ProfileHeader({
   user,
   stats,
   isOwnProfile,
+  onAvatarUpdated
 }) {
   const [modalType, setModalType] = useState(null);
   const [modalUsers, setModalUsers] = useState([]);
+  const [uploading, setUploading] = useState(false);
+  const fileInputRef = useRef(null);
 
   const joined = user?.created_at
     ? new Date(user.created_at).toLocaleDateString("en-GB", {
@@ -32,10 +36,55 @@ export default function ProfileHeader({
     }
   }
 
+  function handleAvatarClick() {
+    if (isOwnProfile) {
+      fileInputRef.current?.click();
+    }
+  }
+
+  async function handleAvatarChange(event) {
+    const file = event.target.files?.[0];
+    if (!file) return;
+
+    try {
+      setUploading(true);
+      const data = await updateAvatar(file);
+      onAvatarUpdated?.(data.avatar_url);
+    } catch (err) {
+      console.error("Unable to update avatar:", err);
+    } finally {
+      setUploading(false);
+      event.target.value = "";
+    }
+  }
+
   return (
     <div className="profile-header">
-      <div className="profile-avatar">
+      <div
+        className={`profile-avatar ${isOwnProfile ? "profile-avatar-editable" : ""}`}
+        onClick={handleAvatarClick}
+      >
         <Avatar src={user.avatar_url} username={user.username} size={120} />
+
+        {isOwnProfile && (
+          <div className="profile-avatar-overlay">
+            {uploading ? (
+              <span className="profile-avatar-uploading">...</span>
+            ) : (
+              <MdOutlineModeEdit size="24px" />
+            )}
+          </div>
+        )}
+
+        {isOwnProfile && (
+          <input
+            ref={fileInputRef}
+            type="file"
+            accept="image/jpeg,image/png,image/webp"
+            onChange={handleAvatarChange}
+            className="profile-avatar-input"
+          />
+        )}
       </div>
 
       <div className="profile-info">
