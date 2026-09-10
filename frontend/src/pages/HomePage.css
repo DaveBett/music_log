@@ -340,6 +340,16 @@
   font-size: 1rem;
 }
 
+.album-artist-link {
+  color: inherit;
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.album-artist-link:hover {
+  color: #4caf50;
+}
+
 @media (max-width: 950px) {
   .home-content {
     grid-template-columns: 1fr;

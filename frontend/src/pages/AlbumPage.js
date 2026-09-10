@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useLocation, useNavigate, useParams } from "react-router-dom";
+import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
 import { getAlbumReviews, getAlbumCoverUrl } from "../api/endpoints";
 import ReviewsBrowser from "../components/reviews/ReviewsBrowser";
 
@@ -51,7 +51,15 @@ export default function AlbumPage() {
         <div>
           <h1>{album?.title}</h1>
           <h3>
-            {album?.artist}
+            {album?.artist && (
+              <Link
+                to={`/artist/${encodeURIComponent(album.artist)}`}
+                state={{ from: `/album/${musicbrainzId}` }}
+                className="album-artist-link"
+              >
+                {album.artist}
+              </Link>
+            )}
             {album?.year ? ` · ${album.year}` : ""}
           </h3>
         </div>

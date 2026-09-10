@@ -106,7 +106,7 @@ const EntryList = ({
         </div>
       ) : (
         <>
-          <div className="entry-container entry-legend">
+          <div className="entry-legend">
             <h3 className="entry-number">#</h3>
             <h3 className="entry-date">Added</h3>
             <h3 className="entry-artist">Artist</h3>

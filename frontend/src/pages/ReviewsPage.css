@@ -1,3 +1,7 @@
+.review-page {
+  padding: 2rem;
+}
+
 .review-list {
   display: flex;
   flex-wrap: wrap;
@@ -322,5 +326,18 @@
     width: 100%;
     display: grid;
     grid-template-columns: 1fr;
+  }
+
+  .review-controls {
+    flex-direction: column;
+    width: 100%;
+    margin-bottom: 1rem;
+  }
+
+  .review-controls .entry-search-input,
+  .review-sort-select,
+  .review-sort-direction {
+    max-width: 100%;
+    width: 100%;
   }
 }
