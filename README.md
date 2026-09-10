@@ -7,6 +7,7 @@
 
 **Live Application:** [musicloggr.com](https://musicloggr.com)  
 **Repository:** [github.com/DaveBett/music_log](https://github.com/DaveBett/music_log)
+
 **Demo account:** Username: "MusicloggrDemo" Password: "Musicloggr123!.
 
 ---
