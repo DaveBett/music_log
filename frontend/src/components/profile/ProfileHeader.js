@@ -7,7 +7,7 @@ import { MdOutlineModeEdit } from "react-icons/md";
 export default function ProfileHeader({
   user,
   stats,
-  isOwnProfile,
+  isOwnProfile = false,
   onAvatarUpdated
 }) {
   const [modalType, setModalType] = useState(null);
@@ -103,7 +103,6 @@ export default function ProfileHeader({
         )}
 
         <div className="profile-meta">
-
           <div className="profile-stat">
             <strong>{stats?.logs ?? 0}</strong>
             <span>Albums</span>
@@ -129,7 +128,6 @@ export default function ProfileHeader({
             <strong>{stats?.following ?? 0}</strong>
             <span>Following</span>
           </button>
-
         </div>
       </div>
 

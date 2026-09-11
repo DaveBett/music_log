@@ -4,8 +4,11 @@
   align-items: center;
   justify-content: space-between;
   padding: 0 32px;
-  background: #121212;
-  border-bottom: 3px solid #4caf50;
+  text-align:center;
+  border-bottom: 3px solid transparent;
+  border-image: linear-gradient(135deg,#4caf50,#6d28d9);
+  border-image-slice: 1;
+  width:100%;
 }
 
 .navbar-logo {

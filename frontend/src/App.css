@@ -100,7 +100,7 @@ form {
 }
 
 .entry-success {
-  color:#4caf50;
+  color: #4caf50;
   padding-left: 4px;
 }
 
@@ -190,7 +190,7 @@ form {
   border: none;
   border-radius: 12px;
   margin-top: 1rem;
-  background-color: #b71c1c;
+  background-color: #b00020;
   color: #111;
   font-size: 1rem;
   font-weight: 700;
@@ -253,7 +253,7 @@ form {
 }
 
 .confirm-delete:hover {
-  background: #b71c1c;
+  background: #b00020;
 }
 
 .cancel-delete {
@@ -381,13 +381,13 @@ form {
   flex-shrink: 0;
   font-size: 0.8rem;
   font-weight: 600;
-  color: #4a7c59;
+  color: #4caf50;
 }
 
 .search-error {
   margin-top: 8px;
   font-size: 0.9rem;
-  color: #b42318;
+  color: #b00020;
 }
 
 .search-status {

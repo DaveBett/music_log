@@ -35,26 +35,51 @@ export default function PublicProfileHeader({
 
   return (
     <div className="profile-header">
-      <Avatar src={user.avatar_url} username={user.username} size={120} />
-      <div className="profile-text">
-      <h1>{user.username}</h1>
-
-      <div className="profile-follow-stats">
-        <button className="stat-link" onClick={() => openModal("followers")}>
-          <strong>{stats?.followers ?? 0}</strong> Followers
-        </button>
-        <button className="stat-link" onClick={() => openModal("following")}>
-          <strong>{stats?.following ?? 0}</strong> Following
-        </button>
-      </div>
+      <div>
+        <Avatar src={user.avatar_url} username={user.username} size={120} />
       </div>
 
-      <button
-        className={`follow-button ${following ? "following" : "not-following"} ${justChanged ? "pulse" : ""}`}
-        onClick={handleClick}
-      >
-        {following ? "Unfollow" : "Follow"}
-      </button>
+      <div className="profile-info">
+        <div className="public-profile-user">
+          <h1>{user?.username}</h1>
+
+          <button
+            className={`follow-button ${following ? "following" : "not-following"} ${justChanged ? "pulse" : ""}`}
+            onClick={handleClick}
+          >
+            {following ? "Unfollow" : "Follow"}
+          </button>
+        </div>
+
+        <div className="profile-meta">
+          <div className="profile-stat">
+            <strong>{stats?.logs ?? 0}</strong>
+            <span>Albums</span>
+          </div>
+
+          <div className="profile-stat">
+            <strong>{stats?.reviews ?? 0}</strong>
+            <span>Reviews</span>
+          </div>
+
+          <button
+            className="profile-stat profile-stat-clickable"
+            onClick={() => openModal("followers")}
+          >
+            <strong>{stats?.followers ?? 0}</strong>
+            <span>Followers</span>
+          </button>
+
+          <button
+            className="profile-stat profile-stat-clickable"
+            onClick={() => openModal("following")}
+          >
+            <strong>{stats?.following ?? 0}</strong>
+            <span>Following</span>
+          </button>
+        </div>
+      </div>
+
 
       {modalType && (
         <FollowListModal

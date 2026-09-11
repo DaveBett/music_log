@@ -7,8 +7,10 @@ export default function UserStatSection({ stats }) {
       </div>
 
       <div className="stat-card">
-        <h3>Reviews Written</h3>
-        <span>{stats?.reviews ?? 0}</span>
+        <h3>This Year's Logs</h3>
+        <span>
+          {stats?.this_year_logs ?? 0}
+        </span>
       </div>
 
       <div className="stat-card">
@@ -22,10 +24,8 @@ export default function UserStatSection({ stats }) {
       </div>
 
       <div className="stat-card">
-        <h3>Most Logged Artist</h3>
-        <span>
-          {stats?.most_logged_artist || "-"}
-        </span>
+        <h3>Reviews Written</h3>
+        <span>{stats?.reviews ?? 0}</span>
       </div>
 
       <div className="stat-card">
@@ -36,12 +36,11 @@ export default function UserStatSection({ stats }) {
       </div>
 
       <div className="stat-card">
-        <h3>This Year's Logs</h3>
+        <h3>Most Logged Artist</h3>
         <span>
-          {stats?.this_year_logs ?? 0}
+          {stats?.most_logged_artist || "-"}
         </span>
       </div>
-
     </div>
   );
 }

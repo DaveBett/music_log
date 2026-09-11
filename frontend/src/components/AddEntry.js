@@ -176,7 +176,7 @@ const AddEntry = ({
               onClick={handleSubmit}
               disabled={!selectedAlbum}
             >
-              Update Album
+              Update
             </button>
 
             <button className="cancel-button" onClick={cancelEdit}>
