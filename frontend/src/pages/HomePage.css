@@ -128,6 +128,40 @@
   font-size: .9rem;
 }
 
+.activity-feed-controls {
+  display: flex;
+  justify-content: center;
+  gap: 0.75rem;
+  margin-top: 1rem;
+}
+
+.activity-feed-button {
+  background-color: #2a2a2a;
+  color: #fff;
+  border: 1px solid #3b3b3b;
+  border-radius: 10px;
+  padding: 0.65rem 1.5rem;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.activity-feed-button:hover {
+  background-color: #343434;
+}
+
+.activity-feed-button-secondary {
+  background-color: transparent;
+  border-color: #343434;
+  color: #bdbdbd;
+}
+
+.activity-feed-button-secondary:hover {
+  background-color: #212121;
+  color: #fff;
+}
+
 .home-sidebar {
   display: flex;
   flex-direction: column;

@@ -35,7 +35,7 @@ class Api::FeedController < ApplicationController
         ]
       )
       .order(created_at: :desc)
-      .limit(20)
+      .limit(30)
   end
 
   def popular_activities
@@ -55,7 +55,7 @@ class Api::FeedController < ApplicationController
           { review: [ :user, :entry ] }
         ]
       )
-      .limit(20)
+      .limit(30)
   end
 
   def recent_activities
@@ -73,7 +73,7 @@ class Api::FeedController < ApplicationController
         ]
       )
       .order(created_at: :desc)
-      .limit(20)
+      .limit(30)
   end
 
   def global_activities
@@ -90,7 +90,7 @@ class Api::FeedController < ApplicationController
         ]
       )
       .order(created_at: :desc)
-      .limit(20)
+      .limit(30)
   end
 
   def activity_json(activity)

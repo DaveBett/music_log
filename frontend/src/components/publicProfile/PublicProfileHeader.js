@@ -33,6 +33,13 @@ export default function PublicProfileHeader({
     }
   }
 
+  const joined = user?.created_at
+    ? new Date(user.created_at).toLocaleDateString("en-GB", {
+        month: "long",
+        year: "numeric",
+      })
+    : null;
+
   return (
     <div className="profile-header">
       <div>
@@ -50,6 +57,14 @@ export default function PublicProfileHeader({
             {following ? "Unfollow" : "Follow"}
           </button>
         </div>
+
+        <div><br></br></div>
+
+        {joined && (
+          <p className="profile-joined">
+            Joined {joined}
+          </p>
+        )}
 
         <div className="profile-meta">
           <div className="profile-stat">

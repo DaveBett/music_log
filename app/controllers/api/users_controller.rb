@@ -153,7 +153,9 @@ class Api::UsersController < ApplicationController
         .average(:rating)
         &.round(2)
       },
-      entries: user.entries.order(created_at: :desc),
+      entries: user.entries.includes(:review).order(created_at: :desc).as_json(
+        include: { review: { only: [ :id ] } }
+      ),
       following: current_user.following?(user)
     }
   end
@@ -185,7 +187,9 @@ class Api::UsersController < ApplicationController
         &.round(2)
       },
 
-      entries: current_user.entries.order(created_at: :desc)
+      entries: current_user.entries.includes(:review).order(created_at: :desc).as_json(
+        include: { review: { only: [ :id ] } }
+      )
     }
   end
 

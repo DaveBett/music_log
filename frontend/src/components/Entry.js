@@ -19,6 +19,7 @@ const Entry = ({
   setConfirmDeleteId,
   isNew,
   editable = false,
+  hasReview = false,
 }) => {
   const isMobile = useIsMobile(700);
   const [menuOpen, setMenuOpen] = useState(false);
@@ -27,7 +28,8 @@ const Entry = ({
     "entry",
     editing && "editing",
     isNew && "new-entry",
-    isMobile && editable && "entry-clickable"
+    isMobile && editable && "entry-clickable",
+    // hasReview && "entry-reviewed"
   ]
     .filter(Boolean)
     .join(" ");

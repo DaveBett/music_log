@@ -220,7 +220,7 @@ form {
 }
 
 .entry.editing {
-  border: 2px solid #ffb703;
+  border: 3px solid #ffb703;
   background: rgba(255, 183, 3, .08);
 
   transition: .2s;
@@ -228,7 +228,7 @@ form {
 
 .delete-confirm {
   background: #fff4f4;
-  border: 2px solid #e74c3c;
+  border: 3px solid #e74c3c;
   border-radius: 14px;
 }
 
@@ -274,10 +274,6 @@ form {
   background: #eefceb;
   border: 2px solid #4caf50;
   border-radius: 14px;
-  transition: background-color 300ms, border-color 300ms;
-}
-
-.entry {
   transition: background-color 300ms, border-color 300ms;
 }
 
@@ -402,6 +398,16 @@ form {
 
 .entry-error {
   margin-top: 10px;
+}
+
+.entry-reviewed {
+  background: linear-gradient(135deg, #4caf50, #6d28d9);
+  padding: 3px;
+  border-radius: 10px;
+}
+
+.entry-reviewed .entry-container {
+  border-radius: 8px;
 }
 
 .search-status {

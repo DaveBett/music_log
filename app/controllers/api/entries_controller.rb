@@ -3,7 +3,10 @@ class Api::EntriesController < ApplicationController
   before_action :authenticate_user!
 
   def index
-    render json: current_user.entries.order(created_at: :desc)
+    render json: current_user.entries
+      .includes(:review)
+      .order(created_at: :desc)
+      .as_json(include: { review: { only: [ :id ] } })
   end
 
   def show

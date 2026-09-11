@@ -138,6 +138,7 @@ const EntryList = ({
               }
               isNew={false}
               editable={editable}
+              hasReview={!!entry.review}
             />
           ))}
         </>
