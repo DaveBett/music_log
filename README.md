@@ -8,6 +8,8 @@
 **Live Application:** [musicloggr.com](https://musicloggr.com)  
 **Repository:** [github.com/DaveBett/music_log](https://github.com/DaveBett/music_log)
 
+**Demo account:** Username: "MusicloggrDemo" Password: "Musicloggr123!.
+
 ---
 
 <img width="1572" height="852" alt="Musicloggr" src="https://github.com/user-attachments/assets/8e8382d7-34f9-4f30-aaca-6a8c5f276c20" />
