@@ -604,13 +604,49 @@ form {
 .follow-modal-item {
   display: flex;
   align-items: center;
+  justify-content: space-between;
   gap: 0.75rem;
   padding: 0.6rem 1.25rem;
+}
+
+.follow-modal-item-link {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
   color: #fff;
+  flex: 1;
+  min-width: 0;
 }
 
 .follow-modal-item:hover {
   background: #252525;
+}
+
+.follow-modal-follow-button {
+  flex-shrink: 0;
+  padding: 0.4rem 0.9rem;
+  border-radius: 8px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.follow-modal-follow-button.not-following {
+  background-color: #4caf50;
+  border: none;
+  color: #fff;
+}
+
+.follow-modal-follow-button.following {
+  background-color: transparent;
+  border: 1px solid #fff;
+  color: #fff;
+}
+
+.follow-modal-follow-button:disabled {
+  opacity: 0.6;
+  cursor: default;
 }
 
 .mode-toggle {

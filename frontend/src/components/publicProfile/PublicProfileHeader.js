@@ -10,7 +10,7 @@ export default function PublicProfileHeader({
   onFollow
 }) {
   const [justChanged, setJustChanged] = useState(false);
-  const [modalType, setModalType] = useState(null); // "followers" | "following" | null
+  const [modalType, setModalType] = useState(null);
   const [modalUsers, setModalUsers] = useState([]);
 
   const handleClick = async () => {

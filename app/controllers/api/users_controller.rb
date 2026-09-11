@@ -288,7 +288,8 @@ class Api::UsersController < ApplicationController
     {
       id: user.id,
       username: user.username,
-      avatar_url: avatar_url(user)
+      avatar_url: avatar_url(user),
+      following: current_user.following?(user)
     }
   end
 end
